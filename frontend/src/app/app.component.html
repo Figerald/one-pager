@@ -1,69 +1,472 @@
+<div class="navigation--glow" #home>
+</div>
+<header class="header-mobile" id="header-mobile" [@mobile-navigation]="expanded ? 'show' : 'hide'">
+  <div class="container py-3">
+      <div class="row justify-content-between">
+          <div class="col-lg-2 navigation--logo">
+              <a href="/">
+                  <img src="../assets/images/logo.png" alt="Alpha Huntsman logo">
+              </a>
+          </div>
+          <div class="col-lg-10 d-flex justify-content-end">
+              <ul class="nav justify-content-end navigation--menu">
+                  <li class="nav-item active">
+                    <a class="nav-link" (click)="scroll(home)">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(about)">About Us</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(MVP)">MVP</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(token)">Token</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(roadmap)">Roadmap</a>
+                  </li>
+                  <!-- <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(news)">News</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(team)">Team</a>
+                  </li> -->
+                  <!-- <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(waitlist)">Waitlist</a>
+                  </li> -->
+                  <li class="nav-item">
+                    <div class="navigation--connect-wallet">
+                      <button type="button" class="btn btn-outline-light">Connect Wallet</button>
+                    </div>
+                  </li>
+              </ul>
+              <div class="navigation--hamburger" (click)="toggleMeniu()">
+                <i data-feather="menu"></i>
+              </div>
+          </div>
+      </div>
+  </div>
+</header>
 <div class="home--wrapper">
-    <header>
-        <!-- <div class="d-flex justify-content-center py-3">
-            <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="#">
-                    <img src="../assets/images/logo.png" alt="Alpha Huntsman logo">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                  <ul class="navbar-nav">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#home">Home</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">About Us</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Waitlist</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">MVP</a>
-                    </li>
-                  </ul>
-                </div>
-            </nav>
-        </div> -->
-        <div class="container py-3">
-            <div class="row justify-content-between">
-                <div class="col-md-2">
-                    <a href="#">
-                        <img src="../assets/images/logo.png" alt="Alpha Huntsman logo">
-                    </a>
-                </div>
-                <div class="col-md-10">
-                    <ul class="nav">
-                        <li class="nav-item active">
-                          <a class="nav-link" href="#home">Home</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="#">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="#">Waitlist</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">MVP</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="container" #home>
+    <div class="container pt-5" id="main" @slide-in>
         <div class="row p-5 justify-content-center">
-            <div class="col-9">
-                <h1 class="text-center display-4 py-3">Work at the speed of thought</h1>
-                <p class="text-center home--text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable</p>
+            <div class="col-sm-9 col-12">
+                <h1 class="text-center display-4 py-3">Tracking the world on data at the time</h1>
+                <p class="text-center home--text">We live in a world of big data, but the world of actionable business insights is stuck in narrative-driven ad-hoc tailored stories. 
+                  Why is that? It was good enough, but we say no more. Let's pierce through the sea of global indicators to measure relevant and almost real-time actionable insights for enterprises</p>
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-4-md d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-light">Lightpaper</button>
-                <button type="button" class="btn btn-outline-light">Waitlist</button>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn main-btn btn-outline-light mr-2"><a href="../assets/pdf/Alpha token - whitepaper v5.pdf" target="_blank">Whitepaper</a></button>
+                <button type="button" class="btn main-btn btn-outline-light ml-2" (click)="open($event)">Waitlist</button>
             </div>
         </div>
     </div>
+    <div class="container-fluid d-flex justify-content-center pt-5" id="chart-image" [@slide-in-text]="chartImageState" #chartImage>
+      <img class="home--image" src="../assets/images/Charts connected.png" alt="AlphaHuntsman firm level charts">
+    </div>
+</div>
+<div class="about pb-5" id="about" #about>
+  <div class="container p-4">
+    <div class="about--wrapper px-5 pb-5" id="platform" #element1>
+      <div class="row justify-content-center">
+        <div class="col-sm-8 col-12 text-center pt-5 pb-3">
+          <h1 class="heading" [@slide-in-text]="aboutState">Powerful platform for your business analytics</h1>
+        </div>
+        <div class="col-sm-10 col-12 text-center py-3">
+          <p class="about--text" [@slide-in-text]="aboutState">The opportunity cost of building and running an in-house analytics unit is immense. That's not even accounting for operational complexity and risks. Try us out instead for free!</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-6 d-flex justify-content-start about--content" [@fade-in-left]="aboutState">
+          <div class="p-3">
+            <i data-feather="trending-up" height="56" width="56" stroke-width="3"></i>
+          </div>
+          <div class="about--container pl-3">
+            <p class="about--container_text">Almost near-time analytics</p>
+            <p class="about--container_small-text">Analytics updated as soon as newly released data is available</p>
+          </div>
+        </div>
+        <!-- <div class="col-2"></div> -->
+        <div class="col-12 col-sm-6 d-flex justify-content-start" [@fade-in]="aboutState">
+          <div class="p-3">
+            <i data-feather="bar-chart" height="56" width="56" stroke-width="3"></i>
+          </div>
+          <div class="about--container pl-3">
+            <p class="about--container_text">Intuitive and actionable insights</p>
+            <p class="about--container_small-text">Streamlined insights from global perspective measured on key enterprise level measures</p>
+          </div>
+        </div>
+      </div>
+      <div class="row pt-4">
+        <div class="col-12 col-sm-6 d-flex justify-content-start about--content" [@fade-in-left]="aboutState">
+          <div class="p-3">
+            <i data-feather="dollar-sign" height="56" width="56" stroke-width="3"></i>
+          </div>
+          <div class="about--container pl-3">
+            <p class="about--container_text">Low setup and running cost</p>
+            <p class="about--container_small-text">We leverage economies of scale and scope of our solutions to drive prices down</p>
+          </div>
+        </div>
+        <!-- <div class="col-2"></div> -->
+        <div class="col-12 col-sm-6 d-flex justify-content-start" [@fade-in]="aboutState">
+          <div class="p-3">
+            <i data-feather="shield" height="56" width="56" stroke-width="3"></i>
+          </div>
+          <div class="about--container pl-3">
+            <p class="about--container_text">Blockchain security</p>
+            <p class="about--container_small-text">Fully anonymized identity management and data securitization layer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider">
+    </div>
+    <div class="row justify-content-around about--video_container" id="video" #element2>
+      <div class="col-sm-5 col-12 d-flex flex-column justify-content-center" [@fade-in-left]="videoState">
+        <h2 class="heading pb-3">Everything at one place</h2>
+        <p class="about--text">No more delays and unnecessary hassle getting the latest figures - it's all in your pocket and always up-to-date! In-depth breakdowns just few clicks away</p>
+      </div>
+      <div class="col-sm-5 col-10">
+        <div class="about--video_glow"></div>
+        <img src="../assets/images/AlphaHuntsman Benedetto.png" alt="AlphaHuntsman Benedetto analytics" class="about--video" [@fade-in]="videoState">
+        <!-- <video class="about--video" autoplay loop [@fade-in]="videoState">
+          <source src="../assets/video/Alpha Huntsman - Tracking the world one data point at the time.mp4" type="video/mp4">
+        </video> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="MVP" id="MVP" #MVP #element3>
+  <div class="container pb-5">
+    <div class="row justify-content-around pb-4">
+      <div class="col-sm-5 col-12 order-2 order-sm-1 d-flex flex-column justify-content-center" [@fade-in-left]="mvpState">
+        <img src="../assets/images/AlphaHuntsman laptop.png" alt="AlphaHuntsman invest">
+      </div>
+      <div class="col-sm-5 col-12 order-1 order-sm-2 d-flex flex-column justify-content-center" [@fade-in]="mvpState">
+        <h2 class="heading pb-3">Built for your enterprise</h2>
+        <p class="about--text">Every analytics solution is molded and adapted to specific business aspects visible from data. No more build-it-once and forget as continuous monitoring, updating and improvements are done daily on our side</p>
+      </div>
+    </div>
+    <div class="row justify-content-center" [@slide-in-button]="mvpState">
+      <button type="button" class="btn main-btn btn-outline-light ml-2"><a href="https://mvp.alphahuntsman.com/" target="_blank" rel="noopener noreferrer">Try now!</a></button>
+    </div>
+  </div>
+</div>
+<div class="token mt-5" id="token" #token #element7>
+  <div class="container" [@slide-in-text]="tokenState">
+    <div class="row justify-content-center">
+      <div class="col-8 text-center">
+        <h1 class="heading py-3">Token Allocation</h1>
+        <p class="about--text">Total supply: 1 000 000 000</p>
+      </div>
+    </div>
+  </div>
+  <div id="token-pie" [@slide-in-button]="tokenState"></div>
+</div>
+<div class="roadmap mt-5" id="roadmap" #roadmap #element8>
+  <div class="container pt-5">
+    <div class="row justify-content-center pb-4" [@slide-in-text]="roadmapState">
+      <div class="col-8 text-center pb-5">
+        <h1 class="heading py-3">Roadmap</h1>
+      </div>
+    </div>
+    <div class="roadmap-h">
+      <div class="row justify-content-center" [@roadmap-animation]="roadmapState">
+        <div class="col-2 mr-3 pr-0 d-flex align-items-end">
+          <div>
+            <div class="roadmap-plan">
+              <p class="roadmap-plan_heading">Fund rasing</p>
+              <p class="roadmap-plan_text">Raising funds</p>
+              <p class="roadmap-plan_text">Expanding team</p>
+              <p class="roadmap-plan_text">MVP development</p>
+            </div>
+            <div class="roadmap-line"></div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div>
+            <div class="roadmap-plan">
+              <p class="roadmap-plan_heading">Product development</p>
+              <p class="roadmap-plan_text">IDO</p>
+              <p class="roadmap-plan_text">Swap listing</p>
+              <p class="roadmap-plan_text">Private sale</p>
+              <p class="roadmap-plan_text">Atlas productization</p>
+              <p class="roadmap-plan_text">Firm level analytics development</p>
+              <p class="roadmap-plan_text">Partnership and marketing execution</p>
+            </div>
+            <div class="roadmap-line"></div>
+          </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-4 d-flex align-items-end">
+          <div>
+            <div class="roadmap-plan">
+              <p class="roadmap-plan_heading">Expansion</p>
+              <p class="roadmap-plan_text">Product expansion to all EU countries</p>
+              <p class="roadmap-plan_text">Analytics expansion to other engines</p>
+              <p class="roadmap-plan_text">Third party market place integration</p>
+            </div>
+            <div class="roadmap-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-2 mr-3 roadmap-horizontal roadmap-1">
+          <div class="roadmap-y2">
+            <div class="roadmap-quarter q-position">Q1</div>
+          </div>
+          <div class="roadmap-date">
+            2022
+          </div>
+        </div>
+        <div class="col-3 roadmap-horizontal roadmap-2">
+          <div class="roadmap-y2">
+            <div class="roadmap-quarter q-position">Q2</div>
+            <div class="roadmap-quarter q-position q3">Q3</div>
+            <div class="roadmap-quarter q-position q4">Q4</div>
+          </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-4 roadmap-horizontal roadmap-3">
+          <div class="roadmap-y2">
+            <div class="roadmap-quarter q-position">Q1</div>
+            <div class="roadmap-quarter q-position q6">Q2</div>
+            <div class="roadmap-quarter q-position q7">Q3</div>
+            <div class="roadmap-quarter q-position q8">Q4</div>
+          </div>
+          <div class="roadmap-date">
+            2023
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roadmap-v" [@roadmap-mobile-animation]="roadmapState">
+      <div class="row mb-3">
+        <div class="roadmap-vertical-container justify-content-center d-flex left-0">
+          <div class="roadmap-vertical roadmap-vertical-1 mr-1"></div>
+          <div class="roadmap-quarter">Q1</div>
+          <div class="roadmap-vertical-line mx-1"></div>
+          <div class="roadmap-vertical-plan">
+            <p class="roadmap-plan_heading">Fund rasing</p>
+            <p class="roadmap-plan_text">Raising funds</p>
+            <p class="roadmap-plan_text">Expanding team</p>
+            <p class="roadmap-plan_text">MVP development</p>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="roadmap-vertical-container justify-content-center d-flex">
+          <div class="roadmap-vertical roadmap-vertical-2 mr-1"></div>
+          <div class="d-flex justify-content-between flex-column">
+            <div class="roadmap-quarter">Q2</div>
+            <div class="roadmap-quarter">Q3</div>
+            <div class="roadmap-quarter">Q4</div>
+          </div>
+          <div class="roadmap-vertical-line mx-1"></div>
+          <div class="roadmap-vertical-plan">
+            <p class="roadmap-plan_heading">Product development</p>
+            <p class="roadmap-plan_text">IDO</p>
+            <p class="roadmap-plan_text">Swap listing</p>
+            <p class="roadmap-plan_text">Private sale</p>
+            <p class="roadmap-plan_text">Atlas productization</p>
+            <p class="roadmap-plan_text">Firm level analytics development</p>
+            <p class="roadmap-plan_text">Partnership and marketing execution</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="roadmap-vertical-container justify-content-center d-flex">
+          <div class="roadmap-vertical roadmap-vertical-3 mr-1"></div>
+          <div class="d-flex justify-content-between flex-column">
+            <div class="roadmap-quarter">Q1</div>
+            <div class="roadmap-quarter">Q2</div>
+            <div class="roadmap-quarter">Q3</div>
+            <div class="roadmap-quarter">Q4</div>
+          </div>
+          <div class="roadmap-vertical-line mx-1"></div>
+          <div class="roadmap-vertical-plan">
+            <p class="roadmap-plan_heading">Expansion</p>
+            <p class="roadmap-plan_text">Product expansion to all EU countries</p>
+            <p class="roadmap-plan_text">Analytics expansion to other engines</p>
+            <p class="roadmap-plan_text">Third party market place integration</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="divider">
+</div>
+<!-- <div class="news" id="news" #news #element4>
+  <div class="container pb-5">
+    <div class="row justify-content-center pb-4">
+      <div class="col-8 text-center" [@slide-in-text]="newsState">
+        <h1 class="heading">News</h1>
+      </div>
+    </div>
+    <div class="row pt-3" [@news-animation]="newsState">
+      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
+        <div class="news--content p-3">
+          <iframe class="iframe" src="https://www.youtube.com/embed/vfOyPMgV_c8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="mt-3 px-3">
+          <p class="mb-0">New partnership marks</p>
+          <p class="news--content_date">January 1, 2022</p>
+        </div>
+      </div>
+      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
+        <div class="news--content p-3">
+          <iframe class="iframe" src="https://www.youtube.com/embed/vfOyPMgV_c8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="mt-3 px-3">
+          <p class="mb-0">New partnership marks</p>
+          <p class="news--content_date">January 1, 2022</p>
+        </div>
+      </div>
+      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
+        <div class="news--content p-3">
+          <iframe class="iframe" src="https://www.youtube.com/embed/vfOyPMgV_c8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="mt-3 px-3">
+          <p class="mb-0">New partnership marks</p>
+          <p class="news--content_date">January 1, 2022</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="divider">
+</div>
+<div class="team"  id="team" #team #element5>
+  <div class="container pb-5">
+    <div class="row justify-content-center">
+      <div class="col-8 text-center pb-5" [@slide-in-text]="teamState">
+        <h1 class="heading">Key team members</h1>
+      </div>
+    </div>
+    <div class="row justify-content-around" [@team-animation]="teamState">
+      <div class="col-sm-4 col-12">
+        <div class="team--wrapper">
+          <div class="team--image">
+            <img class="team--image" src="../assets/images/liutauras.jfif" alt="Liutauras P.">
+          </div>
+          <div>
+            <p class="team--text">CEO</p>
+            <p>Liutauras P.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 col-12">
+        <div class="team--wrapper">
+          <div class="team--image">
+            <img class="team--image" src="../assets/images/liutauras.jfif" alt="Liutauras P.">
+          </div>
+          <div>
+            <p class="team--text">CEO</p>
+            <p>Liutauras P.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 col-12">
+        <div class="team--wrapper">
+          <div class="team--image">
+            <img class="team--image" src="../assets/images/liutauras.jfif" alt="Liutauras P.">
+          </div>
+          <div>
+            <p class="team--text">CEO</p>
+            <p>Liutauras P.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- <div class="divider">
+</div> -->
+<!-- <div class="waitlist pb-5" id="waitlist" #waitlist #element6>
+  <div class="container pt-5 waitlist--wrapper">
+    <div class="row justify-content-center pb-5">
+      <div class="col-8 text-center pb-5">
+        <h1 class="heading" [@slide-in-text]="waitlistState">Stay informed and never miss an AlphaHuntsman update!</h1>
+      </div>
+      <div class="col-10 d-flex justify-content-center" [@slide-in-button]="waitlistState">
+        <input
+          [formControl]="subscribeForm"
+          class="waitlist--input mr-2"
+          type="email"
+          name="Email"
+          id="email"
+          maxlength="256"
+          placeholder="Your email address"
+          required>
+        <button type="button" class="btn main-btn btn-outline-light ml-2" (click)="submit(subscribe)" #subscribe>Subscribe</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<footer>
+  <div class="container py-5 footer--container">
+    <div class="row">
+      <div class="col-12 col-md-5">
+        <div class="mb-4">
+          <img src="../assets/images/logo.png" alt="Alpha Huntsman logo">
+          <p class="footer--small-text">Tracking the world one data at the time.</p>
+        </div>
+        <!-- <div class="d-flex footer--newsletter">
+          <div class="mb-4">
+            <input type="text" placeholder="Join our newsletter" class="footer--input" [formControl]="subscribeForm">
+          </div>
+          <div class="mt-3">
+            <button type="button" class="btn main-btn btn-outline-light" (click)="submit()">Subscribe</button>
+          </div>
+        </div> -->
+      </div>
+      <div class="col-0 col-md-2"></div>
+      <div class="col-6 col-md-3">
+        <p>Quick Links</p>
+        <ul class="footer--links">
+          <li><a (click)="scroll(home)">Home</a></li>
+          <li><a (click)="scroll(about)">About Us</a></li>
+          <li><a (click)="scroll(MVP)">MVP</a></li>
+          <li><a (click)="scroll(token)">Token</a></li>
+          <li><a (click)="scroll(roadmap)">Roadmap</a></li>
+          <!-- <li><a (click)="scroll(news)">News</a></li>
+          <li><a (click)="scroll(team)">Team</a></li> -->
+          <!-- <li><a (click)="scroll(waitlist)">Waitlist</a></li> -->
+        </ul>
+      </div>
+      <div class="col-6 col-md-2">
+        <p>Social</p>
+        <ul class="footer--links">
+          <li><a href="https://twitter.com/alphahuntsman" target="_blank">Twitter</a></li>
+          <li><a href="" target="_blank">LinkedIn</a></li>
+          <li><a href="https://t.me/alphahunstman" target="_blank">Telegram</a></li>
+          <li><a href="https://discord.com/invite/XxQVWbPH7t" target="_blank">Discord</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <p class="footer--copyright">Copyright © 2022 Alpha Huntsman. All rights reserved.</p>
+  </div>
+</footer>
+<div class="waitlist" *ngIf="showWaitlist">
+  <div class="d-flex flex-column align-items-center waitlist--container" [@slide-in-text]="waitlistState" (click)="$event.stopPropagation()">
+    <div class="p-3">
+      <input
+        [formControl]="subscribeForm"
+        class="waitlist--input"
+        type="email"
+        name="Email"
+        id="email"
+        maxlength="256"
+        placeholder="Your email address"
+        required>
+    </div>
+    <div class="p-3">
+      <button type="button" class="btn main-btn btn-outline-light" (click)="submit(subscribe)" #subscribe>Join now!</button>
+    </div>
+  </div>
 </div>
