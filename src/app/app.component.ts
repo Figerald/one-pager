@@ -89,7 +89,9 @@ export class AppComponent implements OnInit {
       data: [
         {
           name: 'Community building',
-          y: 370000000
+          y: 370000000,
+          sliced: true,
+          selected: true
         },
         {
           name: 'Reserve',
