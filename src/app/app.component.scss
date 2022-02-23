@@ -9,8 +9,9 @@ $white: #F7F7F9;
     z-index: 99;
 }
 
-.header-logo {
+.logo-image {
     width: 162px;
+    height: 40px;
 }
 
 .nav-link {
@@ -136,7 +137,7 @@ $white: #F7F7F9;
 }
 
 .MPV-laptop-image {
-    max-height: 208px;
+    max-height: 250px;
 }
 
 .news--content {
@@ -470,7 +471,7 @@ $white: #F7F7F9;
     }
 
     .about--video_glow {
-        top: 26%;
+        top: 15%;
     }
 
     .about--video {
@@ -491,6 +492,12 @@ $white: #F7F7F9;
 
     .roadmap-vertical-line {
         width: 20px;
+    }
+}
+
+@media (max-width: 320px) {
+    .about--video_glow {
+        top: 26%;
     }
 }
 
