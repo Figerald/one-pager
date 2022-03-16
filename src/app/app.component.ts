@@ -206,13 +206,13 @@ export class AppComponent implements OnInit {
       this.mvpState = 'show';
     }
 
-    // if (id === 'news') {
-    //   this.newsState = 'show';
-    // }
+    if (id === 'news') {
+      this.newsState = 'show';
+    }
 
-    // if (id === 'team') {
-    //   this.teamState = 'show';
-    // }
+    if (id === 'team') {
+      this.teamState = 'show';
+    }
 
     if (id === 'token') {
       this.tokenState = 'show';
