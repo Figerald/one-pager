@@ -34,11 +34,11 @@
                   <!-- <li class="nav-item">
                     <a class="nav-link" (click)="scroll(waitlist)">Waitlist</a>
                   </li> -->
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <div class="navigation--connect-wallet">
                       <button type="button" class="btn btn-outline-light">Connect Wallet</button>
                     </div>
-                  </li>
+                  </li> -->
               </ul>
               <div class="navigation--hamburger" (click)="toggleMeniu()">
                 <i data-feather="menu"></i>
@@ -418,8 +418,8 @@
           <li><a (click)="scroll(MVP)">MVP</a></li>
           <li><a (click)="scroll(token)">Token</a></li>
           <li><a (click)="scroll(roadmap)">Roadmap</a></li>
-          <!-- <li><a (click)="scroll(news)">News</a></li>
-          <li><a (click)="scroll(team)">Team</a></li> -->
+          <li><a (click)="scroll(news)">News</a></li>
+          <li><a (click)="scroll(team)">Team</a></li>
           <!-- <li><a (click)="scroll(waitlist)">Waitlist</a></li> -->
         </ul>
       </div>
@@ -435,7 +435,7 @@
     </div>
   </div>
   <div class="container-fluid">
-    <p class="footer--copyright">Copyright © 2022 Alpha Huntsman. All rights reserved.</p>
+    <p class="footer--copyright">Copyright © 2022 AlphaHuntsman. All rights reserved.</p>
   </div>
 </footer>
 <div class="waitlist" *ngIf="showWaitlist">
