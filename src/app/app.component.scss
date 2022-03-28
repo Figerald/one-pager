@@ -42,6 +42,14 @@ $white: #F7F7F9;
     padding: 7px;
 }
 
+.connect-wallet {
+    white-space: nowrap;
+    max-width: 140px;                   /* IE6 needs any width */
+    overflow: hidden;              /* "overflow" value must be different from  visible"*/ 
+    -o-text-overflow: ellipsis;    /* Opera < 11*/
+    text-overflow:    ellipsis;    /* IE, Safari (WebKit), Opera >= 11, FF > 6 */
+}
+
 .home--wrapper {
     height: 100%;
     background-image: linear-gradient($black-AH, $black 60%);

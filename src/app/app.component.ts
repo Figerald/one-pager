@@ -1,9 +1,10 @@
-import { Component, HostListener, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import * as feather from 'feather-icons';
 import * as Highcharts from 'highcharts';
 import highcharts3D from 'highcharts/highcharts-3d'
 import darkUnica from 'highcharts/themes/gray';
+import { Subject, takeUntil } from 'rxjs';
 import { animationsArray } from './animations/animations';
 import { SubscriberService } from './services/subscriber.service';
 import { Web3Service } from './services/web3.service';
@@ -26,10 +27,11 @@ darkUnica(Highcharts);
   styleUrls: ['./app.component.scss'],
   animations: animationsArray
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChildren('element1, element2, element3, element4, element5, element6, element7, element8, chartImage') private elements!: QueryList<any>;
   public detectedElements: any[] = [];
   public expanded = false;
+  public account: string = '';
   public aboutState = 'hide';
   public videoState = 'hide';
   public mvpState = 'hide';
@@ -129,6 +131,7 @@ export class AppComponent implements OnInit {
       ]
     }]
   };
+  private destroy$: Subject<void> = new Subject();
 
   @HostListener('window:scroll', ['$event']) public onScroll(): void {
     this.detectElement();
@@ -146,6 +149,8 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     feather.replace();
     Highcharts.chart('token-pie', this.chartOptions);
+    this.web3Service.setAccount.pipe(takeUntil(this.destroy$)).subscribe(account => this.account = account);
+    console.log(this.account);
   }
 
   public detectElement(): void {
@@ -195,8 +200,12 @@ export class AppComponent implements OnInit {
     this.subscribeForm.setValue('');
   }
 
-  public connectWallet(): void {
+  public async connectWallet(): Promise<void> {
     this.web3Service.verifyMetaMask();
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
   }
 
   private changeAnimation(id: string): void {
