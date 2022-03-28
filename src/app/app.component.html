@@ -20,13 +20,13 @@
                     <a class="nav-link" (click)="scroll(MVP)">MVP</a>
                   </li>
                   <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(news)">News</a>
+                  </li>
+                  <li class="nav-item">
                     <a class="nav-link" (click)="scroll(token)">Token</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" (click)="scroll(roadmap)">Roadmap</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" (click)="scroll(news)">News</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" (click)="scroll(team)">Team</a>
@@ -34,11 +34,11 @@
                   <!-- <li class="nav-item">
                     <a class="nav-link" (click)="scroll(waitlist)">Waitlist</a>
                   </li> -->
-                  <!-- <li class="nav-item">
+                  <li class="nav-item">
                     <div class="navigation--connect-wallet">
-                      <button type="button" class="btn btn-outline-light">Connect Wallet</button>
+                      <button type="button" class="btn btn-outline-light" (click)="connectWallet()">Connect Wallet</button>
                     </div>
-                  </li> -->
+                  </li>
               </ul>
               <div class="navigation--hamburger" (click)="toggleMeniu()">
                 <i data-feather="menu"></i>
@@ -58,7 +58,7 @@
         </div>
         <div class="row justify-content-center">
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn main-btn btn-outline-light mr-2"><a href="../assets/pdf/Alpha token - whitepaper v5.pdf" target="_blank">Whitepaper</a></button>
+                <button type="button" class="btn main-btn btn-outline-light mr-2"><a href="../assets/pdf/Alpha token - whitepaper v6.pdf" target="_blank">Whitepaper</a></button>
                 <button type="button" class="btn main-btn btn-outline-light ml-2" (click)="open($event)">Waitlist</button>
             </div>
         </div>
@@ -154,152 +154,7 @@
     </div>
   </div>
 </div>
-<div class="token mt-5" id="token" #token #element7>
-  <div class="container" [@slide-in-text]="tokenState">
-    <div class="row justify-content-center">
-      <div class="col-8 text-center">
-        <h1 class="heading py-3">Token Allocation</h1>
-        <p class="about--text">Total supply: 1 000 000 000</p>
-      </div>
-    </div>
-  </div>
-  <div id="token-pie" [@slide-in-button]="tokenState"></div>
-</div>
-<div class="roadmap mt-5" id="roadmap" #roadmap #element8>
-  <div class="container pt-5">
-    <div class="row justify-content-center pb-4" [@slide-in-text]="roadmapState">
-      <div class="col-8 text-center pb-5">
-        <h1 class="heading py-3">Roadmap</h1>
-      </div>
-    </div>
-    <div class="roadmap-h">
-      <div class="row justify-content-center" [@roadmap-animation]="roadmapState">
-        <div class="col-2 mr-3 pr-0 d-flex align-items-end">
-          <div>
-            <div class="roadmap-plan">
-              <p class="roadmap-plan_heading">Fund rasing</p>
-              <p class="roadmap-plan_text">Raising funds</p>
-              <p class="roadmap-plan_text">Expanding team</p>
-              <p class="roadmap-plan_text">MVP development</p>
-            </div>
-            <div class="roadmap-line"></div>
-          </div>
-        </div>
-        <div class="col-3">
-          <div>
-            <div class="roadmap-plan">
-              <p class="roadmap-plan_heading">Product development</p>
-              <p class="roadmap-plan_text">IDO</p>
-              <p class="roadmap-plan_text">Swap listing</p>
-              <p class="roadmap-plan_text">Private sale</p>
-              <p class="roadmap-plan_text">Atlas productization</p>
-              <p class="roadmap-plan_text">Firm level analytics development</p>
-              <p class="roadmap-plan_text">Partnership and marketing execution</p>
-            </div>
-            <div class="roadmap-line"></div>
-          </div>
-        </div>
-        <div class="col-1"></div>
-        <div class="col-4 d-flex align-items-end">
-          <div>
-            <div class="roadmap-plan">
-              <p class="roadmap-plan_heading">Expansion</p>
-              <p class="roadmap-plan_text">Product expansion to all EU countries</p>
-              <p class="roadmap-plan_text">Analytics expansion to other engines</p>
-              <p class="roadmap-plan_text">Third party market place integration</p>
-            </div>
-            <div class="roadmap-line"></div>
-          </div>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-2 mr-3 roadmap-horizontal roadmap-1">
-          <div class="roadmap-y2">
-            <div class="roadmap-quarter q-position">Q1</div>
-          </div>
-          <div class="roadmap-date">
-            2022
-          </div>
-        </div>
-        <div class="col-3 roadmap-horizontal roadmap-2">
-          <div class="roadmap-y2">
-            <div class="roadmap-quarter q-position">Q2</div>
-            <div class="roadmap-quarter q-position q3">Q3</div>
-            <div class="roadmap-quarter q-position q4">Q4</div>
-          </div>
-        </div>
-        <div class="col-1"></div>
-        <div class="col-4 roadmap-horizontal roadmap-3">
-          <div class="roadmap-y2">
-            <div class="roadmap-quarter q-position">Q1</div>
-            <div class="roadmap-quarter q-position q6">Q2</div>
-            <div class="roadmap-quarter q-position q7">Q3</div>
-            <div class="roadmap-quarter q-position q8">Q4</div>
-          </div>
-          <div class="roadmap-date">
-            2023
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="roadmap-v" [@roadmap-mobile-animation]="roadmapState">
-      <div class="row mb-3">
-        <div class="roadmap-vertical-container justify-content-center d-flex left-0">
-          <div class="roadmap-vertical roadmap-vertical-1 mr-1"></div>
-          <div class="roadmap-quarter">Q1</div>
-          <div class="roadmap-vertical-line mx-1"></div>
-          <div class="roadmap-vertical-plan">
-            <p class="roadmap-plan_heading">Fund rasing</p>
-            <p class="roadmap-plan_text">Raising funds</p>
-            <p class="roadmap-plan_text">Expanding team</p>
-            <p class="roadmap-plan_text">MVP development</p>
-          </div>
-        </div>
-      </div>
-      <div class="row mb-5">
-        <div class="roadmap-vertical-container justify-content-center d-flex">
-          <div class="roadmap-vertical roadmap-vertical-2 mr-1"></div>
-          <div class="d-flex justify-content-between flex-column">
-            <div class="roadmap-quarter">Q2</div>
-            <div class="roadmap-quarter">Q3</div>
-            <div class="roadmap-quarter">Q4</div>
-          </div>
-          <div class="roadmap-vertical-line mx-1"></div>
-          <div class="roadmap-vertical-plan">
-            <p class="roadmap-plan_heading">Product development</p>
-            <p class="roadmap-plan_text">IDO</p>
-            <p class="roadmap-plan_text">Swap listing</p>
-            <p class="roadmap-plan_text">Private sale</p>
-            <p class="roadmap-plan_text">Atlas productization</p>
-            <p class="roadmap-plan_text">Firm level analytics development</p>
-            <p class="roadmap-plan_text">Partnership and marketing execution</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="roadmap-vertical-container justify-content-center d-flex">
-          <div class="roadmap-vertical roadmap-vertical-3 mr-1"></div>
-          <div class="d-flex justify-content-between flex-column">
-            <div class="roadmap-quarter">Q1</div>
-            <div class="roadmap-quarter">Q2</div>
-            <div class="roadmap-quarter">Q3</div>
-            <div class="roadmap-quarter">Q4</div>
-          </div>
-          <div class="roadmap-vertical-line mx-1"></div>
-          <div class="roadmap-vertical-plan">
-            <p class="roadmap-plan_heading">Expansion</p>
-            <p class="roadmap-plan_text">Product expansion to all EU countries</p>
-            <p class="roadmap-plan_text">Analytics expansion to other engines</p>
-            <p class="roadmap-plan_text">Third party market place integration</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="divider">
-</div>
-<div class="news mt-5" id="news" #news #element4>
+<div class="news mt-5 pb-5" id="news" #news #element4>
   <div class="container pt-5">
     <div class="row justify-content-center pb-5">
       <div class="col-8 text-center" [@slide-in-text]="newsState">
@@ -335,6 +190,154 @@
       </div>
     </div>
   </div>
+</div>
+<div class="token mt-5" id="token" #token #element7>
+  <div class="container" [@slide-in-text]="tokenState">
+    <div class="row justify-content-center">
+      <div class="col-8 text-center">
+        <h1 class="heading py-3">Token Allocation</h1>
+        <p class="about--text">Total supply: 1 000 000 000</p>
+      </div>
+    </div>
+  </div>
+  <div id="token-pie" [@slide-in-button]="tokenState"></div>
+</div>
+<div class="roadmap mt-5" id="roadmap" #roadmap #element8>
+  <div class="container pt-5">
+    <div class="row justify-content-center pb-4" [@slide-in-text]="roadmapState">
+      <div class="col-8 text-center pb-5">
+        <h1 class="heading py-3">Roadmap</h1>
+      </div>
+    </div>
+    <div class="roadmap-h">
+      <div class="row justify-content-center" [@roadmap-animation]="roadmapState">
+        <div class="col-2 mr-3 pr-0 d-flex align-items-end">
+          <div>
+            <div class="roadmap-plan">
+              <p class="roadmap-plan_heading">Fund rasing</p>
+              <p class="roadmap-plan_text">Raising funds</p>
+              <p class="roadmap-plan_text">Expanding team</p>
+              <p class="roadmap-plan_text">MVP development</p>
+            </div>
+            <div class="roadmap-line"></div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div>
+            <div class="roadmap-plan">
+              <p class="roadmap-plan_heading">Product development</p>
+              <p class="roadmap-plan_text">IDO</p>
+              <p class="roadmap-plan_text">Swap listing</p>
+              <p class="roadmap-plan_text">Private sale</p>
+              <p class="roadmap-plan_text">Atlas productization</p>
+              <p class="roadmap-plan_text">Firm level analytics development</p>
+              <p class="roadmap-plan_text">Partnership and marketing execution</p>
+            </div>
+            <div class="roadmap-line"></div>
+          </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-5 d-flex align-items-end">
+          <div>
+            <div class="roadmap-plan">
+              <p class="roadmap-plan_heading">Expansion</p>
+              <p class="roadmap-plan_text">Product expansion to all EU countries</p>
+              <p class="roadmap-plan_text">Analytics expansion to other engines</p>
+              <p class="roadmap-plan_text">Third party market place integration</p>
+            </div>
+            <div class="roadmap-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-2 mr-3 roadmap-horizontal roadmap-1">
+          <div class="roadmap-y2">
+            <div class="roadmap-quarter q-position">Q2</div>
+          </div>
+          <div class="roadmap-date">
+            2022
+          </div>
+        </div>
+        <div class="col-2 roadmap-horizontal roadmap-2">
+          <div class="roadmap-y2">
+            <div class="roadmap-quarter q-position">Q3</div>
+            <div class="roadmap-quarter q-position q4">Q4</div>
+          </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-5 roadmap-horizontal roadmap-3">
+          <div class="roadmap-y2">
+            <div class="roadmap-quarter q-position">Q1</div>
+            <div class="roadmap-quarter q-position q6">Q2</div>
+            <div class="roadmap-quarter q-position q7">Q3</div>
+            <div class="roadmap-quarter q-position q8">Q4</div>
+            <div class="roadmap-quarter q-position q4">Q1</div>
+          </div>
+          <div class="roadmap-date">
+            2023
+          </div>
+          <div class="roadmap-date r-15">
+            2024
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roadmap-v" [@roadmap-mobile-animation]="roadmapState">
+      <div class="row mb-3">
+        <div class="roadmap-vertical-container justify-content-center d-flex left-0">
+          <div class="roadmap-vertical roadmap-vertical-1 mr-1"></div>
+          <div class="roadmap-quarter">Q2</div>
+          <div class="roadmap-vertical-line mx-1"></div>
+          <div class="roadmap-vertical-plan">
+            <p class="roadmap-plan_heading">Fund rasing</p>
+            <p class="roadmap-plan_text">Raising funds</p>
+            <p class="roadmap-plan_text">Expanding team</p>
+            <p class="roadmap-plan_text">MVP development</p>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="roadmap-vertical-container justify-content-center d-flex">
+          <div class="roadmap-vertical roadmap-vertical-2 mr-1"></div>
+          <div class="d-flex justify-content-between flex-column">
+            <div class="roadmap-quarter">Q3</div>
+            <div class="roadmap-quarter">Q4</div>
+          </div>
+          <div class="roadmap-vertical-line mx-1"></div>
+          <div class="roadmap-vertical-plan">
+            <p class="roadmap-plan_heading">Product development</p>
+            <p class="roadmap-plan_text">IDO</p>
+            <p class="roadmap-plan_text">Swap listing</p>
+            <p class="roadmap-plan_text">Private sale</p>
+            <p class="roadmap-plan_text">Atlas productization</p>
+            <p class="roadmap-plan_text">Firm level analytics development</p>
+            <p class="roadmap-plan_text">Partnership and marketing execution</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="roadmap-vertical-container justify-content-center d-flex">
+          <div class="roadmap-vertical roadmap-vertical-3 mr-1"></div>
+          <div class="d-flex justify-content-between flex-column">
+            <div class="roadmap-quarter">Q1</div>
+            <div class="roadmap-quarter">Q2</div>
+            <div class="roadmap-quarter">Q3</div>
+            <div class="roadmap-quarter">Q4</div>
+            <div class="roadmap-quarter">Q1</div>
+          </div>
+          <div class="roadmap-vertical-line mx-1"></div>
+          <div class="roadmap-vertical-plan">
+            <p class="roadmap-plan_heading">Expansion</p>
+            <p class="roadmap-plan_text">Product expansion to all EU countries</p>
+            <p class="roadmap-plan_text">Analytics expansion to other engines</p>
+            <p class="roadmap-plan_text">Third party market place integration</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="divider">
 </div>
 <div class="team mt-5" id="team" #team #element5>
   <div class="container pt-5">

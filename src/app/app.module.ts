@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { SubscriberService } from './services/subscriber.service'
 import { HttpClientModule } from '@angular/common/http';
+import { Web3Service } from './services/web3.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [SubscriberService],
+  providers: [SubscriberService, Web3Service],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

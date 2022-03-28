@@ -6,6 +6,7 @@ import highcharts3D from 'highcharts/highcharts-3d'
 import darkUnica from 'highcharts/themes/gray';
 import { animationsArray } from './animations/animations';
 import { SubscriberService } from './services/subscriber.service';
+import { Web3Service } from './services/web3.service';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -138,7 +139,8 @@ export class AppComponent implements OnInit {
     this.showWaitlist = false;
   }
 
-  public constructor(private readonly subscriberService: SubscriberService) {
+  public constructor(private readonly subscriberService: SubscriberService,
+                     private readonly web3Service: Web3Service) {
   }
 
   public ngOnInit(): void {
@@ -191,6 +193,10 @@ export class AppComponent implements OnInit {
 
     // reset input value
     this.subscribeForm.setValue('');
+  }
+
+  public connectWallet(): void {
+    this.web3Service.verifyMetaMask();
   }
 
   private changeAnimation(id: string): void {
