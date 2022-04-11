@@ -29,9 +29,12 @@ darkUnica(Highcharts);
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChildren('element1, element2, element3, element4, element5, element6, element7, element8, chartImage') private elements!: QueryList<any>;
+  public isWalletModalOpen = false;
   public detectedElements: any[] = [];
   public expanded = false;
   public account: string = '';
+  public fullAccount = '';
+  public accountLoggedIn: boolean = false;
   public aboutState = 'hide';
   public videoState = 'hide';
   public mvpState = 'hide';
@@ -41,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public tokenState = 'hide';
   public roadmapState = 'hide';
   public chartImageState = 'hide';
+  public connectWalletState = 'hide';
   public subscribeForm: FormControl = new FormControl('', [Validators.required, Validators.email]);
   public formInvalid = false;
   public showWaitlist = false;
@@ -140,6 +144,8 @@ export class AppComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event']) public onDocumentClick(): void {
     this.waitlistState = 'hide';
     this.showWaitlist = false;
+    this.isWalletModalOpen = false;
+    this.connectWalletState = 'hide';
   }
 
   public constructor(private readonly subscriberService: SubscriberService,
@@ -149,8 +155,12 @@ export class AppComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     feather.replace();
     Highcharts.chart('token-pie', this.chartOptions);
-    this.web3Service.setAccount.pipe(takeUntil(this.destroy$)).subscribe(account => this.account = account);
-    console.log(this.account);
+    this.web3Service.setAccount.pipe(takeUntil(this.destroy$)).subscribe(account => {
+      if (account) {
+        this.account = `${account.substring(0, 4)}...${account.slice(-4)}`;
+        this.fullAccount = account;
+      }
+    });
   }
 
   public detectElement(): void {
@@ -179,6 +189,17 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  public openConnectWalletModal($event: any): void {
+    $event.stopPropagation();
+    this.isWalletModalOpen = true;
+    setTimeout(() => {
+      this.connectWalletState = 'show';
+    });
+    if (this.account && this.account.length > 0) {
+      this.accountLoggedIn = true;
+    }
+  }
+
   public async submit(element?: HTMLButtonElement): Promise<void> {
     // check input validation
     this.formInvalid = this.subscribeForm.status === 'INVALID' ? true : false;
@@ -198,10 +219,22 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // reset input value
     this.subscribeForm.setValue('');
+    this.waitlistState = 'hide';
+    setTimeout(() => {
+      this.showWaitlist = false;
+    }, 300);
   }
 
   public async connectWallet(): Promise<void> {
     this.web3Service.verifyMetaMask();
+    this.connectWalletState = 'hide';
+    setTimeout(() => {
+      this.isWalletModalOpen = false;
+    }, 300);
+  }
+
+  public async logOut(): Promise<void> {
+    location.reload();
   }
 
   public ngOnDestroy(): void {

@@ -56,6 +56,12 @@ export const animationsArray: AnimationTriggerMetadata[] = [
         transition('show => hide', animate('700ms ease-out')),
         transition('hide => show', animate('700ms ease-out'))
     ]),
+    trigger('slide-in-modal', [
+        state('show', animationShowStyle),
+        state('hide', slideInAnimation),
+        transition('show => hide', animate('300ms ease-out')),
+        transition('hide => show', animate('300ms ease-out'))
+    ]),
     trigger('slide-in-button', [
         state('show', animationShowStyle),
         state('hide', slideInAnimation),

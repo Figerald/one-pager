@@ -48,6 +48,7 @@ export class Web3Service {
       // MetaMask is locked or the user has not connected any accounts
       console.log('Please connect to MetaMask.');
     } else if (accounts[0] !== this.currentAccount) {
+      // send account string
       this.currentAccount.next(accounts[0]);
       // Do any other work!
       console.log('Wallet connected');

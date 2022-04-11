@@ -36,7 +36,7 @@
                   </li> -->
                   <li class="nav-item">
                     <div class="navigation--connect-wallet">
-                      <button type="button" class="btn btn-outline-light connect-wallet" (click)="connectWallet()">{{ account ? account : 'Connect Wallet' }}</button>
+                      <button type="button" class="btn btn-outline-light connect-wallet-button" (click)="openConnectWalletModal($event)">{{ account ? account : 'Connect Wallet' }}</button>
                     </div>
                   </li>
               </ul>
@@ -442,7 +442,7 @@
   </div>
 </footer>
 <div class="waitlist" *ngIf="showWaitlist">
-  <div class="d-flex flex-column align-items-center waitlist--container" [@slide-in-text]="waitlistState" (click)="$event.stopPropagation()">
+  <div class="d-flex flex-column align-items-center waitlist--container" [@slide-in-modal]="waitlistState" (click)="$event.stopPropagation()">
     <div class="p-3">
       <input
         [formControl]="subscribeForm"
@@ -457,5 +457,20 @@
     <div class="p-3">
       <button type="button" class="btn main-btn btn-outline-light" (click)="submit(subscribe)" #subscribe>Join now!</button>
     </div>
+  </div>
+</div>
+<div class="connect-wallet" *ngIf="isWalletModalOpen" [@slide-in-modal]="connectWalletState">
+  <div class="d-flex flex-column align-items-center connect-wallet--container" (click)="$event.stopPropagation()" *ngIf="!accountLoggedIn">
+    <h3>Connect to a wallet</h3>
+    <button type="button" class="btn main-btn btn-outline-light m-3" (click)="connectWallet()">
+      METAMASK 
+      <span class="connect-wallet--container_icon"><img src="../assets/images/metamask.svg" alt="MetaMask wallet connect"></span>
+    </button>
+    <a href="https://docs.binance.org/smart-chain/wallet/metamask.html" target="_blank" class="connect-wallet--container_link">Learn how to connect</a>
+  </div>
+  <div class="d-flex flex-column align-items-center connect-wallet--container" (click)="$event.stopPropagation()" *ngIf="accountLoggedIn">
+    <h3>Your wallet</h3>
+    <p>{{ fullAccount }}</p>
+    <button type="button" class="btn main-btn btn-outline-light m-3 logOut" (click)="logOut()">Logout</button>
   </div>
 </div>

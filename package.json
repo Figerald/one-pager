@@ -21,6 +21,8 @@
     "@angular/router": "13.1.0",
     "@metamask/detect-provider": "^1.2.0",
     "@ng-bootstrap/ng-bootstrap": "11.0.0",
+    "@walletconnect/client": "^1.7.7",
+    "@walletconnect/qrcode-modal": "^1.7.7",
     "bootstrap": "4.6.0",
     "feather-icons": "4.28.0",
     "highcharts": "9.3.3",
