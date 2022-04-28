@@ -161,7 +161,7 @@
         <h1 class="heading">News</h1>
       </div>
     </div>
-    <div class="row pt-3" [@news-animation]="newsState">
+    <div class="row pt-3">
       <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
         <div class="news--content p-3">
           <iframe class="iframe" src="https://www.youtube.com/embed/M9wv9kYHNXA" title="AlphaHuntsman - Whitepaper" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -346,7 +346,7 @@
         <h1 class="heading">Key team members</h1>
       </div>
     </div>
-    <div class="row justify-content-around" [@team-animation]="teamState">
+    <div class="row justify-content-around">
       <div class="col-sm-4 col-12">
         <div class="team--wrapper">
           <div class="team--image">
@@ -419,9 +419,9 @@
           <li><a (click)="scroll(home)">Home</a></li>
           <li><a (click)="scroll(about)">About Us</a></li>
           <li><a (click)="scroll(MVP)">MVP</a></li>
+          <li><a (click)="scroll(news)">News</a></li>
           <li><a (click)="scroll(token)">Token</a></li>
           <li><a (click)="scroll(roadmap)">Roadmap</a></li>
-          <li><a (click)="scroll(news)">News</a></li>
           <li><a (click)="scroll(team)">Team</a></li>
           <!-- <li><a (click)="scroll(waitlist)">Waitlist</a></li> -->
         </ul>
@@ -441,6 +441,34 @@
     <p class="footer--copyright">Copyright © 2022 AlphaHuntsman. All rights reserved.</p>
   </div>
 </footer>
+<!-- <div class="container p-4 d-flex justify-content-center">
+  <div class="presale--wrapper py-4">
+    <div class="presale--wrapper_text">
+      <h1>Deposit</h1>
+      <p>Change BNB to Alpha</p>
+    </div>
+    <div class="presale--form">
+      <div class="d-flex justify-content-center">
+        <input type="number" name="bnb" id="bnb-amount" placeholder="BNB Amount" class="presale--form_input">
+        <div class="presale--form_logo">
+          <img src="../assets/images/Binance.svg" alt="Binance logo">
+          BNB
+        </div>
+      </div>
+      <div class="d-flex justify-content-center py-2">
+        <div class="presale--form_icon">
+          <i data-feather="arrow-down-circle" height="24" width="24" stroke-width="2"></i>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <input type="number" name="bnb" id="bnb-amount" class="presale--form_input">
+      </div>
+    </div>
+    <div class="d-flex justify-content-center pt-4">
+      <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()">Connect wallet</button>
+    </div>
+  </div>
+</div> -->
 <div class="waitlist" *ngIf="showWaitlist">
   <div class="d-flex flex-column align-items-center waitlist--container" [@slide-in-modal]="waitlistState" (click)="$event.stopPropagation()">
     <div class="p-3">

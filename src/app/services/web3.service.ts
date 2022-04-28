@@ -22,6 +22,23 @@ export class Web3Service {
     }
   }
 
+  public async sendToken(account: string): Promise<void> {
+    const provider: any = await detectEthereumProvider();
+    provider
+      .request({
+        method: 'eth_sendTransaction',
+        params: [
+          {
+            from: '0x6C40C0BcB106F782834ab3DEE6219D0792254D76',
+            to: account,
+            value: '0x29a2241af62c0000'
+          },
+        ]
+      })
+      .then((txHash: any) => console.log(txHash))
+      .catch((error: any) => console.log(error));
+  }
+
   private startApp(provider: any): void {
     // If the provider returned by detectEthereumProvider is not the same as
     // window.ethereum, something is overwriting it, perhaps another wallet.

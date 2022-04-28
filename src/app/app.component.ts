@@ -233,6 +233,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 300);
   }
 
+  public async sendToken(): Promise<void> {
+    await this.web3Service.sendToken(this.fullAccount);
+  }
+
   public async logOut(): Promise<void> {
     location.reload();
   }
