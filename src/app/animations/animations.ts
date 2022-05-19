@@ -13,6 +13,7 @@ const slideInAnimation: AnimationStyleMetadata = style({
 });
 
 const fadeInAnimation: AnimationStyleMetadata = style({
+    display: 'none',
     opacity: 0,
     transform: "translate3d(15px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)",
     'transform-style': "preserve-3d"
@@ -23,6 +24,7 @@ const showUpAnimation: AnimationStyleMetadata = style({
 });
 
 const fadeInLeftAnimation: AnimationStyleMetadata = style({
+    display: 'none',
     opacity: 0,
     transform: "translate3d(-15px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)",
     'transform-style': "preserve-3d"

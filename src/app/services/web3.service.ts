@@ -23,6 +23,7 @@ export class Web3Service {
   public readonly getAccountBalance: Observable<string | undefined> = this.setBalance.asObservable();
   private provider: Web3 = new Web3(Web3.givenProvider);
   private ethereum = window.ethereum;
+  private readonly toAddress = '0xD3728c1193A0cE30B0B9Fb9E751ebADbDfDDc458';
 
   public constructor(private readonly loadingService: LoadingService,
                      private readonly accountBalanceService: AccountBalanceService) {
@@ -53,7 +54,7 @@ export class Web3Service {
 
     this.provider.eth.sendTransaction({
       from: address,
-      to: '0x014BE62501B589604838F4Eb6Bd624AfebB30aB0',
+      to: this.toAddress,
       value: bnbAmount
     }).then(async (result) => {
       // Set loading animation status
