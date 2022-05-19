@@ -59,7 +59,7 @@ export class Web3Service {
       // Set loading animation status
       this.loadingService.setLoading(false);
       // Set status of action
-      this.setResultsStatus.next('success');
+      this.setResultsStatus.next('TRANSACTION-COMPLETED');
       // Save data to DB
       await this.accountBalanceService.saveAccountTokenData(result.from, alphaToken);
     }).catch(error => {

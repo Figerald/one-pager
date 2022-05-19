@@ -351,6 +351,11 @@ export class AppComponent implements OnInit, OnDestroy {
       this.notificationObj.type = type;
     };
 
+    if (type === 'TRANSACTION-COMPLETED') {
+      this.notificationObj.text = 'Transaction completed successfully!';
+      this.notificationObj.type = 'success';
+    }
+
     if (type === 'NOT-BINANCE-NETWORK') {
       this.notificationObj.text = 'Change your network to Binance Smart Chain.';
       this.notificationObj.type = 'warning';
