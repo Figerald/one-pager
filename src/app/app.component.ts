@@ -4,10 +4,14 @@ import * as feather from 'feather-icons';
 import * as Highcharts from 'highcharts';
 import highcharts3D from 'highcharts/highcharts-3d'
 import darkUnica from 'highcharts/themes/gray';
+import { AnimationOptions } from 'ngx-lottie';
 import { Subject, takeUntil } from 'rxjs';
 import { animationsArray } from './animations/animations';
+import { ResultTypes } from './services/results';
 import { SubscriberService } from './services/subscriber.service';
 import { Web3Service } from './services/web3.service';
+import { LoadingService } from './services/loading.service';
+import { AccountBalanceService } from './services/account-balance.service';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -33,8 +37,14 @@ export class AppComponent implements OnInit, OnDestroy {
   public detectedElements: any[] = [];
   public expanded = false;
   public account: string = '';
-  public fullAccount = '';
+  public fullAccount: string | undefined;
   public accountLoggedIn: boolean = false;
+  public notificationObj = {
+    type: '',
+    text: ''
+  };
+  public notificationAnimationStatus = 'hide';
+  public balanceAnimationState = 'hide';
   public aboutState = 'hide';
   public videoState = 'hide';
   public mvpState = 'hide';
@@ -48,6 +58,14 @@ export class AppComponent implements OnInit, OnDestroy {
   public subscribeForm: FormControl = new FormControl('', [Validators.required, Validators.email]);
   public formInvalid = false;
   public showWaitlist = false;
+  public isLoading = false;
+  public alphaTokenAmount: number | undefined;
+  public bnbAmount: number | undefined;
+  public accountAlphaTokenDeposit: number | undefined;
+  public accountCurrentBalance: string | undefined;
+  public lottieOptions: AnimationOptions = {
+    path: '/assets/animations.json'
+  };
   public chartOptions: any = {
     chart: {
       type: 'pie',
@@ -149,10 +167,18 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public constructor(private readonly subscriberService: SubscriberService,
-                     private readonly web3Service: Web3Service) {
+                     private readonly web3Service: Web3Service,
+                     private readonly loadingService: LoadingService,
+                     private readonly accountBalanceService: AccountBalanceService) {
+    this.web3Service.getResults.pipe(takeUntil(this.destroy$)).subscribe((result: ResultTypes) => {
+      if (result) {
+        this.handleNotification(result);
+      }
+    });
+    this.loadingService.getLoading.pipe(takeUntil(this.destroy$)).subscribe(loading => this.isLoading = loading);
   }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
     feather.replace();
     Highcharts.chart('token-pie', this.chartOptions);
     this.web3Service.setAccount.pipe(takeUntil(this.destroy$)).subscribe(account => {
@@ -161,6 +187,16 @@ export class AppComponent implements OnInit, OnDestroy {
         this.fullAccount = account;
       }
     });
+    this.web3Service.getAccountBalance.pipe(takeUntil(this.destroy$)).subscribe(balance => {
+      if (balance) {
+        this.accountCurrentBalance = balance;
+        this.balanceAnimationState = 'show';
+        setTimeout(() => {
+          this.balanceAnimationState =  'hide';
+        }, 2500);
+      }
+    });
+    this.accountBalanceService.getAlphaTokenDeposit.pipe(takeUntil(this.destroy$)).subscribe(deposit => this.accountAlphaTokenDeposit = deposit);
   }
 
   public detectElement(): void {
@@ -226,15 +262,31 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public async connectWallet(): Promise<void> {
-    this.web3Service.verifyMetaMask();
+    this.web3Service.startApp();
     this.connectWalletState = 'hide';
     setTimeout(() => {
       this.isWalletModalOpen = false;
     }, 300);
   }
 
+  // TODO
+  // error handling
+  // check if user has any BNB
+  // check if user has more then trying to transfer
+
   public async sendToken(): Promise<void> {
-    await this.web3Service.sendToken(this.fullAccount);
+    if (this.bnbAmount) {
+      this.isLoading = true;
+      await this.web3Service.sendTransaction(this.bnbAmount);
+      this.bnbAmount = 0;
+      this.alphaTokenAmount = undefined;
+    }
+  }
+
+  public convertBnbToAlpha(): void {
+    if (this.bnbAmount) {
+      this.alphaTokenAmount = this.bnbAmount * 110;
+    }
   }
 
   public async logOut(): Promise<void> {
@@ -291,5 +343,62 @@ export class AppComponent implements OnInit, OnDestroy {
     const viewportBottom = viewportTop + document.documentElement.clientHeight;
 
     return elementBottom > viewportTop && elementTop < viewportBottom - 100;
+  }
+
+  private handleNotification(type: string): void {
+    if (type === 'success') {
+      this.notificationObj.text = 'Wallet connected successfully!';
+      this.notificationObj.type = type;
+    };
+
+    if (type === 'NOT-BINANCE-NETWORK') {
+      this.notificationObj.text = 'Change your network to Binance Smart Chain.';
+      this.notificationObj.type = 'warning';
+    };
+
+    if (type === 'METAMASK-MISSING') {
+      this.notificationObj.text = 'MetaMask not installed!'
+      this.notificationObj.type = 'warning';
+    };
+
+    if (type === 'METAMASK-NOT-CONNECTED') {
+      this.notificationObj.text = 'MetaMask is locked or the user has not connected any accounts.';
+      this.notificationObj.type = 'warning';
+    };
+
+    if (type === 'TRANSACTION-FAILED') {
+      this.notificationObj.text = 'Oops, something went wrong, transaction failed!';
+      this.notificationObj.type = 'warning';
+    }
+
+    if (type === 'METAMASK-PENDING-CONNECTION') {
+      this.notificationObj.text = 'Already pending for connection, please open MetaMask.';
+      this.notificationObj.type = 'warning';
+    }
+
+    if (type === 'ETHEREUM-NOT-FOUND') {
+      this.notificationObj.text = 'Failed to connect. Do you have multiple wallets installed?';
+      this.notificationObj.type = 'warning';
+    }
+
+    if (type === 'USER-REFUSED-CONNECTION') {
+      this.notificationObj.text = 'Failed to connect. User rejected the request.';
+      this.notificationObj.type = 'warning';
+    }
+
+    if (type === 'ACCOUNT-CHANGED') {
+      this.notificationObj.text = `Account changed: ${this.fullAccount}`;
+      this.notificationObj.type = 'success';
+    }
+
+    if (type === 'error') {
+      this.notificationObj.text = 'Failed to connect. Please try again later!';
+      this.notificationObj.type = 'warning';
+    }
+
+    this.notificationAnimationStatus = 'show';
+    setTimeout(() => {
+      this.notificationAnimationStatus = 'hide';
+    }, 3300);
   }
 }

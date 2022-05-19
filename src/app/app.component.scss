@@ -148,6 +148,40 @@ $white: #F7F7F9;
     max-height: 250px;
 }
 
+.goal {
+    &--wrapper {
+        width: 700px;
+    }
+
+    &--text {
+       color: $grey-text; 
+    }
+
+    &--progress {
+        background: linear-gradient(#1e1e1e, rgba(67, 67, 67, 0.25));
+        border-radius: 10px;
+        margin: 0 1rem;
+        position: relative;
+
+        &-bar {
+            width: 15%;
+            height: 26px;
+            background: linear-gradient(82.08deg, #cccccc 4.65%, #fea722 44.89%, #ff2d2d 94.49%);
+            border-radius: 10px;
+            backdrop-filter: blur(14px);
+            z-index: 1;
+        }
+
+        &-goal {
+            border-left: 1px solid white;
+            height: 36px;
+            position: absolute;
+            top: -5px;
+            right: 11%;
+        }
+    }
+}
+
 .presale--wrapper {
     background: linear-gradient(rgb(30 30 30), rgb(67 67 67 / 25%));
     width: 700px;
@@ -158,6 +192,11 @@ $white: #F7F7F9;
         p {
             color: $grey-text;
         }
+    }
+
+    &_account {
+        display: flex;
+        justify-content: space-around;
     }
 }
 
@@ -173,7 +212,7 @@ input[type=number] {
 }
 
 .presale--form {
-    width: 550px;
+    max-width: 550px;
     margin: 0 auto;
 
     &_input {
@@ -533,6 +572,51 @@ input[type=number] {
     height: 100px;
 }
 
+.notification {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    padding: 0.5rem 2rem;
+    margin: 0;
+    border-radius: 5px;
+    
+    p {
+        margin: 0;
+    }
+
+    &-success {
+        background-color: #55bf3b;
+        color: white;
+
+    };
+
+    &-warning {
+        background-color: #df5353;
+        color: white;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    &-info {
+        background-color: $white;
+        color: $black-AH;
+        bottom: 60px;
+    }
+}
+
+.loading {
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+}
+
 // For tables and mobile screens
 @media (max-width: 768px) {
     .header-mobile {
@@ -602,6 +686,10 @@ input[type=number] {
     .about--video {
         position: relative;
     }
+
+    .presale--wrapper_account {
+        display: block;
+    }
 }
 
 @media (min-width: 565px) {
@@ -617,6 +705,10 @@ input[type=number] {
 
     .roadmap-vertical-line {
         width: 20px;
+    }
+
+    .presale--wrapper_text {
+        font-size: 12px;
     }
 }
 

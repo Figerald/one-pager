@@ -29,7 +29,7 @@ const fadeInLeftAnimation: AnimationStyleMetadata = style({
 });
 
 const navigationShow: AnimationStyleMetadata = style({
-    height: '402px',
+    height: '441px',
     'padding-left': '31px'
 });
 
@@ -79,6 +79,18 @@ export const animationsArray: AnimationTriggerMetadata[] = [
         state('hide', fadeInLeftAnimation),
         transition('show => hide', animate('700ms ease-out')),
         transition('hide => show', animate('700ms 0.5s ease-out'))
+    ]),
+    trigger('fade-in-notification', [
+        state('show', animationShowStyle),
+        state('hide', fadeInLeftAnimation),
+        transition('show => hide', animate('300ms ease-out')),
+        transition('hide => show', animate('300ms ease-out'))
+    ]),
+    trigger('fade-in-notification-info', [
+        state('show', animationShowStyle),
+        state('hide', fadeInLeftAnimation),
+        transition('show => hide', animate('300ms ease-out')),
+        transition('hide => show', animate('300ms 0.4s ease-out'))
     ]),
     trigger('news-animation', [
         transition('* => *', [

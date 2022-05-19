@@ -14,13 +14,16 @@
                     <a class="nav-link" (click)="scroll(home)">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" (click)="scroll(about)">About Us</a>
+                    <a class="nav-link" (click)="scroll(about)">About</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" (click)="scroll(MVP)">MVP</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" (click)="scroll(news)">News</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(goal)">Presale</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" (click)="scroll(token)">Token</a>
@@ -67,6 +70,7 @@
       <img class="home--image" src="../assets/images/Charts connected.webp" alt="AlphaHuntsman firm level charts">
     </div>
 </div>
+<!-- About us -->
 <div class="about pb-5" id="about" #about>
   <div class="container p-4">
     <div class="about--wrapper px-5 pb-5" id="platform" #element1>
@@ -138,6 +142,7 @@
     </div>
   </div>
 </div>
+<!-- MVP -->
 <div class="MVP" id="MVP" #MVP #element3>
   <div class="container pb-5">
     <div class="row justify-content-around pb-4">
@@ -191,6 +196,78 @@
     </div>
   </div>
 </div>
+<!-- Private sale goal -->
+<div class="goal my-5" id="goal" #goal>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-8 text-center">
+        <h1 class="heading py-3">Private sale goal</h1>
+        <p class="goal--text">To accomplish our ambitious goals, we seek to sell 140M of our tokens.</p>
+      </div>
+      <div class="goal--wrapper">
+        <div class="goal--progress">
+          <div class="goal--progress-bar d-flex align-items-center"></div>
+          <div class="goal--progress-goal"></div>
+        </div>
+        <div class="row justify-content-between m-1">
+          <div class="col-2">Start</div>
+          <div class="col-2">Goal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Wallet information -->
+<div class="container p-4 d-flex justify-content-center" *ngIf="fullAccount">
+  <div class="presale--wrapper py-4">
+    <div class="presale--wrapper_text">
+      <h3>Wallet information</h3>
+    </div>
+    <div class="presale--wrapper_account">
+      <div class="presale--wrapper_text">
+        <p>Address</p>
+        <p>{{ fullAccount }}</p>
+      </div>
+      <div class="presale--wrapper_text">
+        <p>BNB contribution</p>
+        <p>{{ accountAlphaTokenDeposit }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Token deposit -->
+<div class="container p-4 d-flex justify-content-center">
+  <div class="presale--wrapper py-4">
+    <div class="presale--wrapper_text">
+      <h1>Deposit</h1>
+      <p>Change BNB to Alphahuntsman token</p>
+    </div>
+    <div class="presale--form">
+      <div class="d-flex justify-content-center">
+        <input type="number" name="bnb" id="bnb-amount" min="0" [(ngModel)]="bnbAmount" placeholder="BNB Amount" class="presale--form_input">
+        <div class="presale--form_logo">
+          <img src="../assets/images/Binance.svg" alt="Binance logo">
+          BNB
+        </div>
+      </div>
+      <div class="d-flex justify-content-center py-2">
+        <div class="presale--form_icon" (click)="convertBnbToAlpha()">
+          <i data-feather="arrow-down-circle" height="24" width="24" stroke-width="2"></i>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <input type="number" name="alpha" id="alpha-amount" class="presale--form_input" [(ngModel)]="alphaTokenAmount" disabled>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center pt-4">
+      <button type="button" class="btn main-btn btn-outline-light" (click)="openConnectWalletModal($event)" *ngIf="!fullAccount; else buyToken">Connect Wallet</button>
+      <ng-template #buyToken>
+        <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()">Buy token</button>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<!-- Token allocation -->
 <div class="token mt-5" id="token" #token #element7>
   <div class="container" [@slide-in-text]="tokenState">
     <div class="row justify-content-center">
@@ -202,6 +279,7 @@
   </div>
   <div id="token-pie" [@slide-in-button]="tokenState"></div>
 </div>
+<!-- Roadmap -->
 <div class="roadmap mt-5" id="roadmap" #roadmap #element8>
   <div class="container pt-5">
     <div class="row justify-content-center pb-4" [@slide-in-text]="roadmapState">
@@ -339,6 +417,7 @@
 </div>
 <div class="divider">
 </div>
+<!-- Team -->
 <div class="team mt-5" id="team" #team #element5>
   <div class="container pt-5">
     <div class="row justify-content-center">
@@ -417,9 +496,10 @@
         <p>Quick Links</p>
         <ul class="footer--links">
           <li><a (click)="scroll(home)">Home</a></li>
-          <li><a (click)="scroll(about)">About Us</a></li>
+          <li><a (click)="scroll(about)">About</a></li>
           <li><a (click)="scroll(MVP)">MVP</a></li>
           <li><a (click)="scroll(news)">News</a></li>
+          <li><a (click)="scroll(goal)">Presale</a></li>
           <li><a (click)="scroll(token)">Token</a></li>
           <li><a (click)="scroll(roadmap)">Roadmap</a></li>
           <li><a (click)="scroll(team)">Team</a></li>
@@ -441,34 +521,7 @@
     <p class="footer--copyright">Copyright © 2022 AlphaHuntsman. All rights reserved.</p>
   </div>
 </footer>
-<!-- <div class="container p-4 d-flex justify-content-center">
-  <div class="presale--wrapper py-4">
-    <div class="presale--wrapper_text">
-      <h1>Deposit</h1>
-      <p>Change BNB to Alpha</p>
-    </div>
-    <div class="presale--form">
-      <div class="d-flex justify-content-center">
-        <input type="number" name="bnb" id="bnb-amount" placeholder="BNB Amount" class="presale--form_input">
-        <div class="presale--form_logo">
-          <img src="../assets/images/Binance.svg" alt="Binance logo">
-          BNB
-        </div>
-      </div>
-      <div class="d-flex justify-content-center py-2">
-        <div class="presale--form_icon">
-          <i data-feather="arrow-down-circle" height="24" width="24" stroke-width="2"></i>
-        </div>
-      </div>
-      <div class="d-flex justify-content-center">
-        <input type="number" name="bnb" id="bnb-amount" class="presale--form_input">
-      </div>
-    </div>
-    <div class="d-flex justify-content-center pt-4">
-      <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()">Connect wallet</button>
-    </div>
-  </div>
-</div> -->
+<!-- Waitlist modal -->
 <div class="waitlist" *ngIf="showWaitlist">
   <div class="d-flex flex-column align-items-center waitlist--container" [@slide-in-modal]="waitlistState" (click)="$event.stopPropagation()">
     <div class="p-3">
@@ -487,6 +540,7 @@
     </div>
   </div>
 </div>
+<!-- Connect to metamask modal -->
 <div class="connect-wallet" *ngIf="isWalletModalOpen" [@slide-in-modal]="connectWalletState">
   <div class="d-flex flex-column align-items-center connect-wallet--container" (click)="$event.stopPropagation()" *ngIf="!accountLoggedIn">
     <h3>Connect to a wallet</h3>
@@ -501,4 +555,14 @@
     <p>{{ fullAccount }}</p>
     <button type="button" class="btn main-btn btn-outline-light m-3 logOut" (click)="logOut()">Logout</button>
   </div>
+</div>
+<!-- Notification -->
+<div class="notification notification-{{notificationObj.type}}" [@fade-in-notification]="notificationAnimationStatus">
+  <p>{{ notificationObj.text }}</p>
+</div>
+<div class="notification notification-info" [@fade-in-notification-info]="balanceAnimationState">
+  <p>Your balance: {{ accountCurrentBalance }}</p>
+</div>
+<div class="loading" *ngIf="isLoading">
+  <ng-lottie width="300px" height="300px" [options]="lottieOptions"></ng-lottie>
 </div>
