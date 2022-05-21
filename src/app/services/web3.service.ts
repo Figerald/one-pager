@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import { ResultTypes } from './results';
 import { LoadingService } from './loading.service';
 import { AccountBalanceService } from './account-balance.service';
+import { environment } from '../../environments/environment';
 
 declare global {
   interface Window {
@@ -23,7 +24,7 @@ export class Web3Service {
   public readonly getAccountBalance: Observable<string | undefined> = this.setBalance.asObservable();
   private provider: Web3 = new Web3(Web3.givenProvider);
   private ethereum = window.ethereum;
-  private readonly toAddress = '0xD3728c1193A0cE30B0B9Fb9E751ebADbDfDDc458';
+  private readonly toAddress = environment.toAddress;
 
   public constructor(private readonly loadingService: LoadingService,
                      private readonly accountBalanceService: AccountBalanceService) {

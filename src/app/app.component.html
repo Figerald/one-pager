@@ -54,7 +54,7 @@
     <div class="container pt-5" id="main" @slide-in>
         <div class="row p-5 justify-content-center">
             <div class="col-sm-9 col-12">
-                <h1 class="text-center display-4 py-3">Tracking the world on data at the time</h1>
+                <h1 class="text-center display-4 py-3">Tracking the world one data at the time</h1>
                 <p class="text-center home--text">We live in a world of big data, but the world of actionable business insights is stuck in narrative-driven ad-hoc tailored stories. 
                   Why is that? It was good enough, but we say no more. Let's pierce through the sea of global indicators to measure relevant and almost real-time actionable insights for enterprises</p>
             </div>
@@ -201,8 +201,8 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-8 text-center">
-        <h1 class="heading py-3">Private sale goal</h1>
-        <p class="goal--text">To accomplish our ambitious goals, we seek to sell 140M of our tokens.</p>
+        <h1 class="heading py-3">Private sale</h1>
+        <p class="goal--text">To accomplish our ambitious goals, we seek to raised a hard cap.</p>
       </div>
       <div class="goal--wrapper">
         <div class="goal--progress">
@@ -211,7 +211,7 @@
         </div>
         <div class="row justify-content-between m-1">
           <div class="col-2">Start</div>
-          <div class="col-2">Goal</div>
+          <div class="col-2 text-center">Hard cap</div>
         </div>
       </div>
     </div>
@@ -262,7 +262,7 @@
     <div class="d-flex justify-content-center pt-4">
       <button type="button" class="btn main-btn btn-outline-light" (click)="openConnectWalletModal($event)" *ngIf="!fullAccount; else buyToken">Connect Wallet</button>
       <ng-template #buyToken>
-        <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()">Buy token</button>
+        <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()">Reserve token</button>
       </ng-template>
     </div>
   </div>
@@ -512,7 +512,6 @@
           <li><a href="https://twitter.com/alphahuntsman" target="_blank">Twitter</a></li>
           <li><a href="" target="_blank">LinkedIn</a></li>
           <li><a href="https://t.me/alphahunstman" target="_blank">Telegram</a></li>
-          <li><a href="https://discord.com/invite/XxQVWbPH7t" target="_blank">Discord</a></li>
         </ul>
       </div>
     </div>
