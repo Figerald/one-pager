@@ -1,4 +1,4 @@
-import { Component, HostListener, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import * as feather from 'feather-icons';
 import * as Highcharts from 'highcharts';
@@ -33,7 +33,7 @@ darkUnica(Highcharts);
   styleUrls: ['./app.component.scss'],
   animations: animationsArray
 })
-export class AppComponent implements OnInit, OnDestroy, OnChanges {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChildren('element1, element2, element3, element4, element5, element6, element7, element8, chartImage') private elements!: QueryList<any>;
   public isWalletModalOpen = false;
   public isReferModalOpen = false;
@@ -198,10 +198,6 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges {
     this.loadingService.getLoading.pipe(takeUntil(this.destroy$)).subscribe(loading => this.isLoading = loading);
   }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-  }
-
   public async ngOnInit(): Promise<void> {
     feather.replace();
     Highcharts.chart('token-pie', this.chartOptions);
@@ -294,6 +290,9 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public async referFriend(): Promise<void> {
+    this.referAddressEmpty = false;
+    this.invalidReferAddress = false;
+
     if (!this.fullAccount) {
       this.walletNotConnected = true;
 
@@ -315,7 +314,6 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges {
 
     // Check if address has been referred before
     const referredAddress: ReferralData = await this.referralService.getReferredAddress(this.referredAddress);
-    console.log(referredAddress);
     if (referredAddress) {
       this.addressAlreadyReferred = true;
 
@@ -324,9 +322,6 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges {
 
     this.referDiscount = 1.2;
     this.alphaTokenAmount = this.alphaTokenAmount ? this.alphaTokenAmount * 1.2 : this.alphaTokenAmount;
-
-    this.referAddressEmpty = false;
-    this.invalidReferAddress = false;
     this.isReferModalOpen = false;
     this.addressAlreadyReferred = false;
     this.referState = 'hide';
@@ -368,7 +363,6 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges {
 
   public async convertBnbToAlpha(): Promise<void> {
     if (this.bnbAmount) {
-      console.log(this.bnbAmount);
       const price: number = await this.tokenCalculationService.calculatePrice(this.bnbAmount);
       this.alphaTokenAmount = Math.round(this.bnbAmount * price * 10000) / 10000;
       this.referDiscount ? this.alphaTokenAmount = this.alphaTokenAmount * this.referDiscount : this.alphaTokenAmount;
@@ -376,7 +370,6 @@ export class AppComponent implements OnInit, OnDestroy, OnChanges {
         const isFromReferralList: ReferralData | undefined = await this.referralService.getReferredAddress(this.fullAccount);
         isFromReferralList ? this.alphaTokenAmount = this.alphaTokenAmount * 1.2 : this.alphaTokenAmount;
       }
-      console.log(this.alphaTokenAmount);
     } else {
       this.handleNotification('BNB-empty');
       this.alphaTokenAmount = undefined;
