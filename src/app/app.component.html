@@ -14,15 +14,6 @@
                     <a class="nav-link" (click)="scroll(home)">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" (click)="scroll(about)">About</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" (click)="scroll(MVP)">MVP</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" (click)="scroll(news)">News</a>
-                  </li>
-                  <li class="nav-item">
                     <a class="nav-link" (click)="scroll(goal)">Presale</a>
                   </li>
                   <li class="nav-item">
@@ -32,14 +23,23 @@
                     <a class="nav-link" (click)="scroll(roadmap)">Roadmap</a>
                   </li>
                   <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(about)">About</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(MVP)">MVP</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" (click)="scroll(news)">News</a>
+                  </li>
+                  <li class="nav-item">
                     <a class="nav-link" (click)="scroll(team)">Team</a>
                   </li>
                   <!-- <li class="nav-item">
                     <a class="nav-link" (click)="scroll(waitlist)">Waitlist</a>
                   </li> -->
                   <li class="nav-item">
-                    <div class="navigation--connect-wallet">
-                      <button type="button" class="btn btn-outline-light connect-wallet-button" (click)="openConnectWalletModal($event)">{{ account ? account : 'Connect Wallet' }}</button>
+                    <div class="navigation--ah-modal">
+                      <button type="button" class="btn btn-outline-light ah-modal-button" (click)="openConnectWalletModal($event)">{{ account ? account : 'Connect Wallet' }}</button>
                     </div>
                   </li>
               </ul>
@@ -62,139 +62,13 @@
         <div class="row justify-content-center">
             <div class="d-flex justify-content-between">
                 <button type="button" class="btn main-btn btn-outline-light mr-2"><a href="../assets/pdf/Alpha token - whitepaper v6.pdf" target="_blank">Whitepaper</a></button>
-                <button type="button" class="btn main-btn btn-outline-light ml-2" (click)="open($event)">Waitlist</button>
+                <button type="button" class="btn main-btn btn-outline-light ml-2" (click)="scroll(goal)">Presale</button>
             </div>
         </div>
     </div>
     <div class="container-fluid d-flex justify-content-center pt-5" id="chart-image" [@slide-in-text]="chartImageState" #chartImage>
       <img class="home--image" src="../assets/images/Charts connected.webp" alt="AlphaHuntsman firm level charts">
     </div>
-</div>
-<!-- About us -->
-<div class="about pb-5" id="about" #about>
-  <div class="container p-4">
-    <div class="about--wrapper px-5 pb-5" id="platform" #element1>
-      <div class="row justify-content-center">
-        <div class="col-sm-8 col-12 text-center pt-5 pb-3">
-          <h1 class="heading" [@slide-in-text]="aboutState">Powerful platform for your business analytics</h1>
-        </div>
-        <div class="col-sm-10 col-12 text-center py-3">
-          <p class="about--text" [@slide-in-text]="aboutState">The opportunity cost of building and running an in-house analytics unit is immense. That's not even accounting for operational complexity and risks. Try us out instead for free!</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 col-sm-6 d-flex justify-content-start about--content" [@fade-in-left]="aboutState">
-          <div class="p-3">
-            <i data-feather="trending-up" height="56" width="56" stroke-width="3"></i>
-          </div>
-          <div class="about--container pl-3">
-            <p class="about--container_text">Almost near-time analytics</p>
-            <p class="about--container_small-text">Analytics updated as soon as newly released data is available</p>
-          </div>
-        </div>
-        <!-- <div class="col-2"></div> -->
-        <div class="col-12 col-sm-6 d-flex justify-content-start" [@fade-in]="aboutState">
-          <div class="p-3">
-            <i data-feather="bar-chart" height="56" width="56" stroke-width="3"></i>
-          </div>
-          <div class="about--container pl-3">
-            <p class="about--container_text">Intuitive and actionable insights</p>
-            <p class="about--container_small-text">Streamlined insights from global perspective measured on key enterprise level measures</p>
-          </div>
-        </div>
-      </div>
-      <div class="row pt-4">
-        <div class="col-12 col-sm-6 d-flex justify-content-start about--content" [@fade-in-left]="aboutState">
-          <div class="p-3">
-            <i data-feather="dollar-sign" height="56" width="56" stroke-width="3"></i>
-          </div>
-          <div class="about--container pl-3">
-            <p class="about--container_text">Low setup and running cost</p>
-            <p class="about--container_small-text">We leverage economies of scale and scope of our solutions to drive prices down</p>
-          </div>
-        </div>
-        <!-- <div class="col-2"></div> -->
-        <div class="col-12 col-sm-6 d-flex justify-content-start" [@fade-in]="aboutState">
-          <div class="p-3">
-            <i data-feather="shield" height="56" width="56" stroke-width="3"></i>
-          </div>
-          <div class="about--container pl-3">
-            <p class="about--container_text">Blockchain security</p>
-            <p class="about--container_small-text">Fully anonymized identity management and data securitization layer</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="divider">
-    </div>
-    <div class="row justify-content-around about--video_container" id="video" #element2>
-      <div class="col-sm-5 col-12 d-flex flex-column justify-content-center" [@fade-in-left]="videoState">
-        <h2 class="heading pb-3">Everything at one place</h2>
-        <p class="about--text">No more delays and unnecessary hassle getting the latest figures - it's all in your pocket and always up-to-date! In-depth breakdowns just few clicks away</p>
-      </div>
-      <div class="col-sm-5 col-10">
-        <div class="about--video_glow"></div>
-        <img src="../assets/images/AlphaHuntsman Benedetto.webp" alt="AlphaHuntsman Benedetto analytics" class="about--video" [@fade-in]="videoState">
-        <!-- <video class="about--video" autoplay loop [@fade-in]="videoState">
-          <source src="../assets/video/Alpha Huntsman - Tracking the world one data point at the time.mp4" type="video/mp4">
-        </video> -->
-      </div>
-    </div>
-  </div>
-</div>
-<!-- MVP -->
-<div class="MVP" id="MVP" #MVP #element3>
-  <div class="container pb-5">
-    <div class="row justify-content-around pb-4">
-      <div class="col-sm-5 col-12 order-2 order-sm-1 d-flex flex-column justify-content-center" [@fade-in-left]="mvpState">
-        <img src="../assets/images/AlphaHuntsman laptop.webp" alt="AlphaHuntsman invest" class="MPV-laptop-image">
-      </div>
-      <div class="col-sm-5 col-12 order-1 order-sm-2 d-flex flex-column justify-content-center" [@fade-in]="mvpState">
-        <h2 class="heading pb-3">Built for your enterprise</h2>
-        <p class="about--text">Every analytics solution is molded and adapted to specific business aspects visible from data. No more build-it-once and forget as continuous monitoring, updating and improvements are done daily on our side</p>
-      </div>
-    </div>
-    <div class="row justify-content-center" [@slide-in-button]="mvpState">
-      <button type="button" class="btn main-btn btn-outline-light ml-2"><a href="https://mvp.alphahuntsman.com/" target="_blank" rel="noopener noreferrer">Try now!</a></button>
-    </div>
-  </div>
-</div>
-<div class="news mt-5 pb-5" id="news" #news #element4>
-  <div class="container pt-5">
-    <div class="row justify-content-center pb-5">
-      <div class="col-8 text-center" [@slide-in-text]="newsState">
-        <h1 class="heading">News</h1>
-      </div>
-    </div>
-    <div class="row pt-3">
-      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
-        <div class="news--content p-3">
-          <iframe class="iframe" src="https://www.youtube.com/embed/M9wv9kYHNXA" title="AlphaHuntsman - Whitepaper" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="mt-3 px-3">
-          <p class="mb-0">AlphaHuntsman - Whitepaper</p>
-          <p class="news--content_date">March 16, 2022</p>
-        </div>
-      </div>
-      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
-        <div class="news--content p-3">
-          <iframe class="iframe" src="https://www.youtube.com/embed/rJ8TKcqtd8Q" title="Alphahuntsman - Atlas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="mt-3 px-3">
-          <p class="mb-0">Alphahuntsman - Atlas</p>
-          <p class="news--content_date">March 16, 2022</p>
-        </div>
-      </div>
-      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
-        <div class="news--content p-3">
-          <iframe class="iframe" src="https://www.youtube.com/embed/qGO_69_Lf-o" title="Alphahuntsman - Benedetto" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>        </div>
-        <div class="mt-3 px-3">
-          <p class="mb-0">Alphahuntsman - Benedetto</p>
-          <p class="news--content_date">March 16, 2022</p>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 <!-- Private sale goal -->
 <div class="goal my-5" id="goal" #goal>
@@ -218,9 +92,9 @@
   </div>
 </div>
 <!-- Wallet information -->
-<div class="container p-4 d-flex justify-content-center" *ngIf="fullAccount">
-  <div class="presale--wrapper py-4">
-    <div class="presale--wrapper_text">
+<div class="container p-5 d-flex justify-content-center" *ngIf="fullAccount">
+  <div class="presale--wrapper py-5">
+    <div class="presale--wrapper_text mb-4">
       <h3>Wallet information</h3>
     </div>
     <div class="presale--wrapper_account">
@@ -229,41 +103,71 @@
         <p>{{ fullAccount }}</p>
       </div>
       <div class="presale--wrapper_text">
-        <p>BNB contribution</p>
+        <p>Alpha token contribution</p>
         <p>{{ accountAlphaTokenDeposit }}</p>
       </div>
     </div>
   </div>
 </div>
 <!-- Token deposit -->
-<div class="container p-4 d-flex justify-content-center">
-  <div class="presale--wrapper py-4">
-    <div class="presale--wrapper_text">
+<div class="container presale d-flex justify-content-center">
+  <div class="presale--wrapper py-5">
+    <div class="presale--wrapper_text mb-4">
       <h1>Deposit</h1>
       <p>Change BNB to Alphahuntsman token</p>
     </div>
     <div class="presale--form">
-      <div class="d-flex justify-content-center">
-        <input type="number" name="bnb" id="bnb-amount" min="0" [(ngModel)]="bnbAmount" placeholder="BNB Amount" class="presale--form_input">
+      <div class="d-flex justify-content-center mb-4">
+        <input type="number"
+               name="bnb"
+               id="bnb-amount"
+               min="0"
+               class="presale--form_input"
+               [(ngModel)]="bnbAmount"
+               (ngModelChange)="convertBnbToAlpha()"
+               placeholder="BNB Amount">
         <div class="presale--form_logo">
           <img src="../assets/images/Binance.svg" alt="Binance logo">
           BNB
         </div>
       </div>
-      <div class="d-flex justify-content-center py-2">
+      <!-- <div class="d-flex justify-content-center py-2">
         <div class="presale--form_icon" (click)="convertBnbToAlpha()">
           <i data-feather="arrow-down-circle" height="24" width="24" stroke-width="2"></i>
         </div>
-      </div>
+      </div> -->
       <div class="d-flex justify-content-center">
-        <input type="number" name="alpha" id="alpha-amount" class="presale--form_input" [(ngModel)]="alphaTokenAmount" disabled>
+        <input type="number"
+               name="alpha"
+               id="alpha-amount"
+               class="presale--form_input"
+               placeholder="Corresponding Alpha token amount"
+               [(ngModel)]="alphaTokenAmount"
+               disabled>
+        <div class="presale--form_logo">
+          <img src="../assets/images/token_small_icon.png" alt="Alphahuntsman token logo">
+          ALPX
+        </div>
       </div>
     </div>
-    <div class="d-flex justify-content-center pt-4">
+    <div class="d-flex justify-content-center pt-5">
+      <!-- <button type="button"
+              class="btn main-btn btn-outline-light mr-2"
+              placement="bottom"
+              ngbTooltip="Refer wallet address and get better price plus bonus tokens"
+              [disabled]="isReferButtonDisabled"
+              (click)="openReferModal($event)">{{ isReferButtonDisabled ? 'Bonus added!' : 'Refer a friend' }}
+        <i data-feather="help-circle" height="16" width="16" stroke-width="2" class="ml-1"></i>
+      </button> -->
       <button type="button" class="btn main-btn btn-outline-light" (click)="openConnectWalletModal($event)" *ngIf="!fullAccount; else buyToken">Connect Wallet</button>
       <ng-template #buyToken>
         <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()">Reserve token</button>
       </ng-template>
+    </div>
+    <div class="presale--wrapper_text mt-3">
+      <a placement="bottom" ngbTooltip="Refer wallet address and get better price plus bonus tokens" (click)="openReferModal($event)">
+        Refer a friend and get better price! <i data-feather="info" height="16" width="16" stroke-width="2" class="ml-1"></i>
+      </a>
     </div>
   </div>
 </div>
@@ -417,6 +321,132 @@
 </div>
 <div class="divider">
 </div>
+<!-- About us -->
+<div class="about pb-5" id="about" #about>
+  <div class="container p-4">
+    <div class="about--wrapper px-5 pb-5" id="platform" #element1>
+      <div class="row justify-content-center">
+        <div class="col-sm-8 col-12 text-center pt-5 pb-3">
+          <h1 class="heading" [@slide-in-text]="aboutState">Powerful platform for your business analytics</h1>
+        </div>
+        <div class="col-sm-10 col-12 text-center py-3">
+          <p class="about--text" [@slide-in-text]="aboutState">The opportunity cost of building and running an in-house analytics unit is immense. That's not even accounting for operational complexity and risks. Try us out instead for free!</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-6 d-flex justify-content-start about--content" [@fade-in-left]="aboutState">
+          <div class="p-3">
+            <i data-feather="trending-up" height="56" width="56" stroke-width="3"></i>
+          </div>
+          <div class="about--container pl-3">
+            <p class="about--container_text">Almost near-time analytics</p>
+            <p class="about--container_small-text">Analytics updated as soon as newly released data is available</p>
+          </div>
+        </div>
+        <!-- <div class="col-2"></div> -->
+        <div class="col-12 col-sm-6 d-flex justify-content-start" [@fade-in]="aboutState">
+          <div class="p-3">
+            <i data-feather="bar-chart" height="56" width="56" stroke-width="3"></i>
+          </div>
+          <div class="about--container pl-3">
+            <p class="about--container_text">Intuitive and actionable insights</p>
+            <p class="about--container_small-text">Streamlined insights from global perspective measured on key enterprise level measures</p>
+          </div>
+        </div>
+      </div>
+      <div class="row pt-4">
+        <div class="col-12 col-sm-6 d-flex justify-content-start about--content" [@fade-in-left]="aboutState">
+          <div class="p-3">
+            <i data-feather="dollar-sign" height="56" width="56" stroke-width="3"></i>
+          </div>
+          <div class="about--container pl-3">
+            <p class="about--container_text">Low setup and running cost</p>
+            <p class="about--container_small-text">We leverage economies of scale and scope of our solutions to drive prices down</p>
+          </div>
+        </div>
+        <!-- <div class="col-2"></div> -->
+        <div class="col-12 col-sm-6 d-flex justify-content-start" [@fade-in]="aboutState">
+          <div class="p-3">
+            <i data-feather="shield" height="56" width="56" stroke-width="3"></i>
+          </div>
+          <div class="about--container pl-3">
+            <p class="about--container_text">Blockchain security</p>
+            <p class="about--container_small-text">Fully anonymized identity management and data securitization layer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider">
+    </div>
+    <div class="row justify-content-around about--video_container" id="video" #element2>
+      <div class="col-sm-5 col-12 d-flex flex-column justify-content-center" [@fade-in-left]="videoState">
+        <h2 class="heading pb-3">Everything at one place</h2>
+        <p class="about--text">No more delays and unnecessary hassle getting the latest figures - it's all in your pocket and always up-to-date! In-depth breakdowns just few clicks away</p>
+      </div>
+      <div class="col-sm-5 col-10">
+        <div class="about--video_glow"></div>
+        <img src="../assets/images/AlphaHuntsman Benedetto.webp" alt="AlphaHuntsman Benedetto analytics" class="about--video" [@fade-in]="videoState">
+        <!-- <video class="about--video" autoplay loop [@fade-in]="videoState">
+          <source src="../assets/video/Alpha Huntsman - Tracking the world one data point at the time.mp4" type="video/mp4">
+        </video> -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MVP -->
+<div class="MVP" id="MVP" #MVP #element3>
+  <div class="container pb-5">
+    <div class="row justify-content-around pb-4">
+      <div class="col-sm-5 col-12 order-2 order-sm-1 d-flex flex-column justify-content-center" [@fade-in-left]="mvpState">
+        <img src="../assets/images/AlphaHuntsman laptop.webp" alt="AlphaHuntsman invest" class="MPV-laptop-image">
+      </div>
+      <div class="col-sm-5 col-12 order-1 order-sm-2 d-flex flex-column justify-content-center" [@fade-in]="mvpState">
+        <h2 class="heading pb-3">Built for your enterprise</h2>
+        <p class="about--text">Every analytics solution is molded and adapted to specific business aspects visible from data. No more build-it-once and forget as continuous monitoring, updating and improvements are done daily on our side</p>
+      </div>
+    </div>
+    <div class="row justify-content-center" [@slide-in-button]="mvpState">
+      <button type="button" class="btn main-btn btn-outline-light ml-2"><a href="https://mvp.alphahuntsman.com/" target="_blank" rel="noopener noreferrer">Try now!</a></button>
+    </div>
+  </div>
+</div>
+<div class="news mt-5 pb-5" id="news" #news #element4>
+  <div class="container pt-5">
+    <div class="row justify-content-center pb-5">
+      <div class="col-8 text-center" [@slide-in-text]="newsState">
+        <h1 class="heading">News</h1>
+      </div>
+    </div>
+    <div class="row pt-3">
+      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
+        <div class="news--content p-3">
+          <iframe class="iframe" src="https://www.youtube.com/embed/M9wv9kYHNXA" title="AlphaHuntsman - Whitepaper" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="mt-3 px-3">
+          <p class="mb-0">AlphaHuntsman - Whitepaper</p>
+          <p class="news--content_date">March 16, 2022</p>
+        </div>
+      </div>
+      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
+        <div class="news--content p-3">
+          <iframe class="iframe" src="https://www.youtube.com/embed/rJ8TKcqtd8Q" title="Alphahuntsman - Atlas" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="mt-3 px-3">
+          <p class="mb-0">Alphahuntsman - Atlas</p>
+          <p class="news--content_date">March 16, 2022</p>
+        </div>
+      </div>
+      <div class="col-sm-4 col-12 d-flex flex-column justify-content-center">
+        <div class="news--content p-3">
+          <iframe class="iframe" src="https://www.youtube.com/embed/qGO_69_Lf-o" title="Alphahuntsman - Benedetto" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>        </div>
+        <div class="mt-3 px-3">
+          <p class="mb-0">Alphahuntsman - Benedetto</p>
+          <p class="news--content_date">March 16, 2022</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Team -->
 <div class="team mt-5" id="team" #team #element5>
   <div class="container pt-5">
@@ -495,13 +525,13 @@
       <div class="col-6 col-md-3">
         <p>Quick Links</p>
         <ul class="footer--links">
+          <li><a (click)="scroll(goal)">Presale</a></li>
+          <li><a (click)="scroll(token)">Token</a></li>
+          <li><a (click)="scroll(roadmap)">Roadmap</a></li>
           <li><a (click)="scroll(home)">Home</a></li>
           <li><a (click)="scroll(about)">About</a></li>
           <li><a (click)="scroll(MVP)">MVP</a></li>
           <li><a (click)="scroll(news)">News</a></li>
-          <li><a (click)="scroll(goal)">Presale</a></li>
-          <li><a (click)="scroll(token)">Token</a></li>
-          <li><a (click)="scroll(roadmap)">Roadmap</a></li>
           <li><a (click)="scroll(team)">Team</a></li>
           <!-- <li><a (click)="scroll(waitlist)">Waitlist</a></li> -->
         </ul>
@@ -540,19 +570,37 @@
   </div>
 </div>
 <!-- Connect to metamask modal -->
-<div class="connect-wallet" *ngIf="isWalletModalOpen" [@slide-in-modal]="connectWalletState">
-  <div class="d-flex flex-column align-items-center connect-wallet--container" (click)="$event.stopPropagation()" *ngIf="!accountLoggedIn">
+<div class="ah-modal" *ngIf="isWalletModalOpen" [@slide-in-modal]="connectWalletState">
+  <div class="d-flex flex-column align-items-center ah-modal--container" (click)="$event.stopPropagation()" *ngIf="!accountLoggedIn">
     <h3>Connect to a wallet</h3>
     <button type="button" class="btn main-btn btn-outline-light m-3" (click)="connectWallet()">
       METAMASK 
-      <span class="connect-wallet--container_icon"><img src="../assets/images/metamask.svg" alt="MetaMask wallet connect"></span>
+      <span class="ah-modal--container_icon"><img src="../assets/images/metamask.svg" alt="MetaMask wallet connect"></span>
     </button>
-    <a href="https://docs.binance.org/smart-chain/wallet/metamask.html" target="_blank" class="connect-wallet--container_link">Learn how to connect</a>
+    <a href="https://docs.binance.org/smart-chain/wallet/metamask.html" target="_blank" class="ah-modal--container_link">Learn how to connect</a>
   </div>
-  <div class="d-flex flex-column align-items-center connect-wallet--container" (click)="$event.stopPropagation()" *ngIf="accountLoggedIn">
+  <div class="d-flex flex-column align-items-center ah-modal--container" (click)="$event.stopPropagation()" *ngIf="accountLoggedIn">
     <h3>Your wallet</h3>
     <p>{{ fullAccount }}</p>
     <button type="button" class="btn main-btn btn-outline-light m-3 logOut" (click)="logOut()">Logout</button>
+  </div>
+</div>
+<!-- Refer modal -->
+<div class="ah-modal" *ngIf="isReferModalOpen" [@slide-in-modal]="referState">
+  <div class="ah-modal--container p-4" (click)="$event.stopPropagation()">
+    <h3>Refer a friend</h3>
+    <div class="d-flex flex-column align-items-center" *ngIf="!walletNotConnected">
+      <p class="ah-modal--container_text">Enter friend wallet address and get better price and bonus token!</p>
+      <input type="text" name="refer" id="refer-friend" [(ngModel)]="referredAddress" placeholder="Wallet address to refer" class="ah-modal--container_input">
+      <p class="ah-modal--warning" *ngIf="referAddressEmpty">Please enter wallet address</p>
+      <p class="ah-modal--warning" *ngIf="invalidReferAddress">Please enter valid wallet address!</p>
+      <p class="ah-modal--warning" *ngIf="addressAlreadyReferred">This account has been referred!</p>
+      <button type="button" class="btn main-btn btn-outline-light m-3 logOut" (click)="referFriend()">Submit</button>
+    </div>
+    <div class="d-flex flex-column align-items-center" *ngIf="walletNotConnected">
+      <p class="ah-modal--container_text">Please connect your wallet first!</p>
+      <button type="button" class="btn main-btn btn-outline-light m-3 logOut" (click)="connectWallet()">Connect Wallet</button>
+    </div>
   </div>
 </div>
 <!-- Notification -->

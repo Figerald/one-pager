@@ -11,10 +11,10 @@ export class AccountBalanceService {
     public constructor(private readonly http: HttpClient) {
     }
 
-    public async saveAccountTokenData(address: string, alphaToken: number): Promise<void> {
+    public async saveAccountTokenData(address: string, alphaToken: number, price: number, referredAddress?: string): Promise<void> {
         try {
             // Save: account address, BNB transferred amount
-            await lastValueFrom(this.http.post<{ status: string }>('https://api.alphahuntsman.com/token', { address, alphaToken }));
+            await lastValueFrom(this.http.post<{ status: string }>('https://api.alphahuntsman.com/token', { address, alphaToken, referredAddress, price }));
             await this.getAccountTokens(address);
         } catch (error) {
             console.log(error);

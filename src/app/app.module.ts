@@ -12,6 +12,8 @@ import { LoadingService } from './services/loading.service';
 import { AccountBalanceService } from './services/account-balance.service';
 import { LottieModule } from 'ngx-lottie';
 import player from 'lottie-web';
+import { TokenCalculationService } from './services/token-calculation.service';
+import { ReferralService } from './services/referral.service';
 
 export function playerFactory() {
   return player;
@@ -34,7 +36,9 @@ export function playerFactory() {
     SubscriberService,
     Web3Service,
     LoadingService,
-    AccountBalanceService
+    AccountBalanceService,
+    TokenCalculationService,
+    ReferralService
   ],
   bootstrap: [AppComponent]
 })

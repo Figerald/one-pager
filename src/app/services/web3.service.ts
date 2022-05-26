@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import Web3 from 'web3';
-import { ResultTypes } from './results';
+import { ReferralData, ResultTypes } from './types/types';
 import { LoadingService } from './loading.service';
 import { AccountBalanceService } from './account-balance.service';
 import { environment } from '../../environments/environment';
+import { TokenCalculationService } from './token-calculation.service';
+import { ReferralService } from './referral.service';
 
 declare global {
   interface Window {
@@ -27,7 +29,9 @@ export class Web3Service {
   private readonly toAddress = environment.toAddress;
 
   public constructor(private readonly loadingService: LoadingService,
-                     private readonly accountBalanceService: AccountBalanceService) {
+                     private readonly accountBalanceService: AccountBalanceService,
+                     private readonly TokenCalculationService: TokenCalculationService,
+                     private readonly referralService: ReferralService) {
   }
 
   public verifyMetaMask(): boolean {
@@ -43,7 +47,7 @@ export class Web3Service {
     return true;
   }
 
-  public async sendTransaction(value: number): Promise<void> {
+  public async sendTransaction(value: number, referAddress?: string): Promise<void> {
     if (!this.verifyMetaMask()) return;
     if (!await this.getChainId()) return;
 
@@ -51,7 +55,6 @@ export class Web3Service {
     if (!address) return;
 
     const bnbAmount: string = this.provider.utils.toWei(value.toString(), 'ether');
-    const alphaToken: number = value;
 
     this.provider.eth.sendTransaction({
       from: address,
@@ -60,10 +63,32 @@ export class Web3Service {
     }).then(async (result) => {
       // Set loading animation status
       this.loadingService.setLoading(false);
+
       // Set status of action
       this.setResultsStatus.next('TRANSACTION-COMPLETED');
+
+      // Calc alpha token amount
+      const price: number = await this.TokenCalculationService.calculatePrice(value);
+      let alphaToken: number = Math.round(value * price * 10000) / 10000;
+
+      // Check if address is from referral list
+      const isReferred: ReferralData = await this.referralService.getReferredAddress(address);
+      if (isReferred) {
+        alphaToken = alphaToken * 1.2;
+      }
+
+      // Add referral discount
+      if (referAddress) {
+        alphaToken = alphaToken * 1.2;
+        await this.referralService.saveReferAddress(referAddress);
+      }
+
+      // Update Alpha token price
+      // TODO: update progress
+      await this.TokenCalculationService.updateTokenPrice(price, alphaToken);
+
       // Save data to DB
-      await this.accountBalanceService.saveAccountTokenData(result.from, alphaToken);
+      await this.accountBalanceService.saveAccountTokenData(result.from, alphaToken, price, referAddress);
     }).catch(error => {
       this.setResultsStatus.next('TRANSACTION-FAILED');
       this.loadingService.setLoading(false);
@@ -112,6 +137,10 @@ export class Web3Service {
           });
       })
       .catch(err => this.setResultsStatus.next('error'));
+  }
+
+  public checkWalletAddress(address: string): boolean {
+    return this.provider.utils.isAddress(address);
   }
 
   private async handleAccountsChanged(accounts: any): Promise<void> {
@@ -202,6 +231,7 @@ export class Web3Service {
       this.currentAccount.next(accounts[0]);
       this.setResultsStatus.next('ACCOUNT-CHANGED');
       const balance: string = await this.getBalance(accounts[0]);
+      await this.accountBalanceService.getAccountTokens(accounts[0]);
       this.setBalance.next(balance);
     });
 
