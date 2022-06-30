@@ -14,6 +14,18 @@ $white: #F7F7F9;
     color: $white;
 }
 
+.bottom-65 {
+    bottom: 65px !important;
+}
+
+.bottom-115 {
+    bottom: 115px !important;
+}
+
+.white-color {
+    color: $white;
+}
+
 .header-mobile {
     position: fixed;
     width: 100%;
@@ -219,6 +231,18 @@ $white: #F7F7F9;
             justify-content: space-around;
         }
     }
+
+    &--table {
+        width: 600px;
+
+        &_head {
+            color: $white;
+        }
+
+        &_text {
+            color: $grey-text;
+        }
+    }
 }
 
 
@@ -269,6 +293,11 @@ input[type=number] {
         &:hover {
             background-color: $black-AH;
         }
+    }
+
+    &_label {
+        font-size: 12px;
+        color: $grey-text;
     }
 }
 
@@ -430,12 +459,12 @@ input[type=number] {
         }
     
         &-2 {
-            height: 200px;
+            height: 350px;
             background-color: #828282;
         }
     
         &-3 {
-            height: 350px;
+            height: 150px;
             background-color: #3b3b3b;
         }
     }
@@ -446,28 +475,16 @@ input[type=number] {
     top: -40px;
 }
 
+.q2 {
+    left: calc(33% - 17px);
+}
+
 .q3 {
-    left: 42%;
+    left: calc(66% - 17px);
 }
 
 .q4 {
     right: 0;
-}
-
-.q6 {
-    left: calc(26% - 17px);
-}
-
-.q7 {
-    left: calc(50% - 17px);
-}
-
-.q8 {
-    left: calc(76% - 17px)
-}
-
-.r-15 {
-    right: 15px;
 }
 
 .team--wrapper {
@@ -706,6 +723,10 @@ input[type=number] {
     .roadmap-h {
         display: none;
     }
+
+    .presale--table {
+        width: 550px;
+    }
 }
 
 @media (max-width: 565px) {
@@ -740,6 +761,10 @@ input[type=number] {
     .presale--wrapper_account {
         display: block;
     }
+
+    .presale--table {
+        width: 100%;
+    }
 }
 
 @media (min-width: 565px) {
@@ -754,7 +779,7 @@ input[type=number] {
     }
 }
 
-@media (max-width: 372px) {
+@media (max-width: 376px) {
     .roadmap-vertical-container {
         left: 11px;
     }

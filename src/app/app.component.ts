@@ -7,13 +7,14 @@ import darkUnica from 'highcharts/themes/gray';
 import { AnimationOptions } from 'ngx-lottie';
 import { Subject, takeUntil } from 'rxjs';
 import { animationsArray } from './animations/animations';
-import { ReferralData, ResultTypes } from './services/types/types';
+import { ReferralData, ResultTypes, WalletInformation } from './services/types/types';
 import { SubscriberService } from './services/subscriber.service';
 import { Web3Service } from './services/web3.service';
 import { LoadingService } from './services/loading.service';
 import { AccountBalanceService } from './services/account-balance.service';
 import { TokenCalculationService } from './services/token-calculation.service';
 import { ReferralService } from './services/referral.service';
+import { chartOptions } from './models/chart-options';
 
 declare var require: any;
 let Boost = require('highcharts/modules/boost');
@@ -36,21 +37,24 @@ darkUnica(Highcharts);
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChildren('element1, element2, element3, element4, element5, element6, element7, element8, chartImage') private elements!: QueryList<any>;
   public isWalletModalOpen = false;
-  public isReferModalOpen = false;
-  public isReferButtonDisabled = false;
-  public addressAlreadyReferred = false;
-  public referDiscount: number | undefined;
   public detectedElements: any[] = [];
   public expanded = false;
   public account: string = '';
   public fullAccount: string | undefined;
+  // Referred account data
+  public referredAccountData: ReferralData | undefined;
+  // Account which referred another account
+  public referralAccount: string | undefined;
   public accountLoggedIn: boolean = false;
-  public referredAddress: string | undefined;
+  public referralInput: string | undefined;
+  public referralAddress: string | undefined;
   public walletNotConnected = false;
+  public progressRaised: number = 0.4;
   public notificationObj = {
     type: '',
     text: ''
   };
+  public referralAnimationStatus = 'hide';
   public notificationAnimationStatus = 'hide';
   public balanceAnimationState = 'hide';
   public aboutState = 'hide';
@@ -63,107 +67,19 @@ export class AppComponent implements OnInit, OnDestroy {
   public roadmapState = 'hide';
   public chartImageState = 'hide';
   public connectWalletState = 'hide';
-  public referState = 'hide';
   public subscribeForm: FormControl = new FormControl('', [Validators.required, Validators.email]);
   public formInvalid = false;
   public showWaitlist = false;
   public isLoading = false;
-  public referAddressEmpty = false;
-  public invalidReferAddress = false;
   public alphaTokenAmount: number | undefined;
   public bnbAmount: number | undefined;
-  public accountAlphaTokenDeposit: number | undefined;
+  public walletInformation: WalletInformation[] | undefined;
   public accountCurrentBalance: string | undefined;
   public lottieOptions: AnimationOptions = {
     path: '/assets/animations.json'
   };
-  public chartOptions: any = {
-    chart: {
-      type: 'pie',
-      options3d: {
-        enabled: true,
-        alpha: 45,
-        beta: 0
-      },
-      backgroundColor: '#000000'
-    },
-    title: {
-      text: ''
-    },
-    credits: {
-      enabled: false
-    },
-    accessibility: {
-      point: {
-        valueSuffix: '%'
-      }
-    },
-    tooltip: {
-      pointFormat: '{series.name}: <b>{point.y}</b>'
-    },
-    plotOptions: {
-      pie: {
-        allowPointSelect: true,
-        cursor: 'pointer',
-        depth: 50,
-        dataLabels: {
-          enabled: false
-        },
-        showInLegend: true
-      }
-    },
-    legend: {
-      backgroundColor: '#000000',
-      itemStyle: {
-        fontFamily: 'Rubik',
-        color: '#a0a0a0'
-    }
-    },
-    series: [{
-      type: 'pie',
-      name: 'Token share',
-      data: [
-        {
-          name: 'Community building',
-          y: 370000000,
-          sliced: true,
-          selected: true
-        },
-        {
-          name: 'Reserve',
-          y: 50000000
-        },
-        {
-          name: 'Team/Advisory',
-          y: 180000000
-        },
-        {
-          name: 'Marketing',
-          y: 80000000
-        },
-        {
-          name: 'Public sale',
-          y: 40000000
-        },
-        {
-          name: 'Initial swap',
-          y: 40000000
-        },
-        {
-          name: 'Private sale',
-          y: 140000000
-        },
-        {
-          name: 'Marketing',
-          y: 50000000
-        },
-        {
-          name: 'Reserve',
-          y: 50000000
-        }
-      ]
-    }]
-  };
+  public chartOptions: any = chartOptions;
+  private referredPrice: number | undefined;
   private destroy$: Subject<void> = new Subject();
 
   @HostListener('window:scroll', ['$event']) public onScroll(): void {
@@ -172,15 +88,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event']) public onDocumentClick(): void {
     this.waitlistState = 'hide';
-    this.referState = 'hide';
     this.connectWalletState = 'hide';
-    this.referAddressEmpty = false;
-    this.invalidReferAddress = false;
-    this.addressAlreadyReferred = false;
     setTimeout(() => {
       this.showWaitlist = false;
       this.isWalletModalOpen = false;
-      this.isReferModalOpen = false;
     }, 300);
   }
 
@@ -201,12 +112,19 @@ export class AppComponent implements OnInit, OnDestroy {
   public async ngOnInit(): Promise<void> {
     feather.replace();
     Highcharts.chart('token-pie', this.chartOptions);
-    this.web3Service.setAccount.pipe(takeUntil(this.destroy$)).subscribe(account => {
+
+    this.web3Service.setAccount.pipe(takeUntil(this.destroy$)).subscribe(async (account: string) => {
       if (account) {
         this.account = `${account.substring(0, 4)}...${account.slice(-4)}`;
         this.fullAccount = account;
+        this.referredAccountData = await this.referralService.getReferredAddress(this.fullAccount);
+        if (this.referredAccountData && this.referredAccountData.address && !this.referredAccountData.isReferComplete) {
+          this.referralAnimationStatus = 'show';
+          this.referralAccount = this.referredAccountData.address;
+        }
       }
     });
+
     this.web3Service.getAccountBalance.pipe(takeUntil(this.destroy$)).subscribe(balance => {
       if (balance) {
         this.accountCurrentBalance = balance;
@@ -216,7 +134,17 @@ export class AppComponent implements OnInit, OnDestroy {
         }, 2500);
       }
     });
-    this.accountBalanceService.getAlphaTokenDeposit.pipe(takeUntil(this.destroy$)).subscribe(deposit => this.accountAlphaTokenDeposit = deposit);
+
+    this.accountBalanceService.getAlphaTokenDeposit.pipe(takeUntil(this.destroy$)).subscribe(data => {
+      if (data && data.length > 0) {
+        this.walletInformation = data;
+      } else {
+        this.walletInformation = undefined;
+      }
+    });
+
+    this.progressRaised = await this.tokenCalculationService.getProgressNumber();
+    this.setProgressBar();
   }
 
   public detectElement(): void {
@@ -256,14 +184,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  public openReferModal($event: any): void {
-    $event.stopPropagation();
-    this.isReferModalOpen = true;
-    setTimeout(() => {
-      this.referState = 'show';
-    });
-  }
-
   public async submit(element?: HTMLButtonElement): Promise<void> {
     // check input validation
     this.formInvalid = this.subscribeForm.status === 'INVALID' ? true : false;
@@ -289,57 +209,13 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 300);
   }
 
-  public async referFriend(): Promise<void> {
-    this.referAddressEmpty = false;
-    this.invalidReferAddress = false;
-
-    if (!this.fullAccount) {
-      this.walletNotConnected = true;
-
-      return;
-    }
-
-    if (!this.referredAddress) {
-      this.referAddressEmpty = true;
-
-      return;
-    }
-
-    // Check if valid eth wallet address
-    if (!this.web3Service.checkWalletAddress(this.referredAddress)) {
-      this.invalidReferAddress = true;
-
-      return;
-    }
-
-    // Check if address has been referred before
-    const referredAddress: ReferralData = await this.referralService.getReferredAddress(this.referredAddress);
-    if (referredAddress) {
-      this.addressAlreadyReferred = true;
-
-      return;
-    }
-
-    this.referDiscount = 1.2;
-    this.alphaTokenAmount = this.alphaTokenAmount ? this.alphaTokenAmount * 1.2 : this.alphaTokenAmount;
-    this.isReferModalOpen = false;
-    this.addressAlreadyReferred = false;
-    this.referState = 'hide';
-    setTimeout(() => {
-      this.isReferModalOpen = false;
-    }, 300);
-    this.isReferButtonDisabled = true;
-    this.handleNotification('refer-success');
-  }
-
   public async connectWallet(): Promise<void> {
     this.web3Service.startApp();
     this.connectWalletState = 'hide';
-    this.referState = 'hide';
     this.walletNotConnected = false;
+    this.referralInput = undefined;
     setTimeout(() => {
       this.isWalletModalOpen = false;
-      this.isReferModalOpen = false;
     }, 300);
   }
 
@@ -348,31 +224,68 @@ export class AppComponent implements OnInit, OnDestroy {
   // check if user has any BNB
   // check if user has more then trying to transfer
 
+  // Handle situation:
+  // 1. User do not add referral
+  // 2. User adds referral
+  //   - check if referral was used
+
   public async sendToken(): Promise<void> {
     if (this.bnbAmount) {
       this.isLoading = true;
-      await this.web3Service.sendTransaction(this.bnbAmount, this.referredAddress);
-      this.bnbAmount = 0;
-      this.alphaTokenAmount = undefined;
-      this.referredAddress = undefined;
-      this.referDiscount = undefined;
+      if (this.referredAccountData && this.referredPrice) {
+        await this.web3Service.sendReferralTransaction(this.bnbAmount, this.referredPrice, this.referredAccountData);
+        this.referredAccountData.isReferComplete = true;
+      } else {
+        await this.web3Service.sendTransaction(this.bnbAmount, this.referralAddress);
+      }
+      this.restoreDepositInputs();
     } else {
       this.handleNotification('BNB-empty');
     }
   }
 
-  public async convertBnbToAlpha(): Promise<void> {
+  public async convertBnbToAlpha(): Promise<number | undefined> {
     if (this.bnbAmount) {
-      const price: number = await this.tokenCalculationService.calculatePrice(this.bnbAmount);
-      this.alphaTokenAmount = Math.round(this.bnbAmount * price * 10000) / 10000;
-      this.referDiscount ? this.alphaTokenAmount = this.alphaTokenAmount * this.referDiscount : this.alphaTokenAmount;
-      if (this.fullAccount) {
-        const isFromReferralList: ReferralData | undefined = await this.referralService.getReferredAddress(this.fullAccount);
-        isFromReferralList ? this.alphaTokenAmount = this.alphaTokenAmount * 1.2 : this.alphaTokenAmount;
+      // Calc for referred address
+      if (this.referredPrice) {
+        const price: number = Math.round(this.bnbAmount * this.referredPrice * 10000) / 10000;
+        return this.alphaTokenAmount = price * 1.2;
       }
+      const price: number = await this.tokenCalculationService.calculatePrice(this.bnbAmount);
+      return this.alphaTokenAmount = Math.round(this.bnbAmount * price * 10000) / 10000;
     } else {
       this.handleNotification('BNB-empty');
-      this.alphaTokenAmount = undefined;
+      return this.alphaTokenAmount = undefined;
+    }
+  }
+
+  public async checkReferredAddress(): Promise<void> {
+    // return if wallet not connected
+    if (!this.fullAccount) {
+      return this.handleNotification('wallet-not-connected');
+    }
+
+    if (this.referralInput) {
+      // Check if address is valid ETH wallet address
+      if (!this.web3Service.checkWalletAddress(this.referralInput)) return this.handleNotification('bad-address');
+      
+      // Check if referred address is not the same connected
+      if (this.fullAccount && this.fullAccount.toLowerCase() === this.referralInput.toLowerCase()) {
+        return this.handleNotification('same-account-and-address');
+      }
+
+      // Calc price for referred address
+      if (this.referralAccount && this.referralInput.toLowerCase() === this.referralAccount.toLowerCase()) {
+        return this.calcReferredAddressPrice();
+      }
+
+      // Check if address is referred
+      const referralData: ReferralData | undefined = await this.referralService.getReferredAddress(this.referralInput);
+      if (referralData && referralData.referredAddress.toLowerCase() === this.referralInput.toLowerCase()) {
+        return this.handleNotification('address-referred');
+      }
+
+      this.referralAddress = this.referralInput;
     }
   }
 
@@ -382,6 +295,21 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.destroy$.next();
+  }
+
+  private async calcReferredAddressPrice(): Promise<void> {
+    // fullAccount is referredAddress and referralInput the address who referred
+    if (this.fullAccount && this.referralInput) {
+      this.referredPrice = await this.tokenCalculationService.getReferralPrice(this.referralInput, this.fullAccount);
+      this.handleNotification('refer-success');
+    }
+  }
+
+  private setProgressBar(): void {
+    const element: HTMLElement | null = document.querySelector('.goal--progress-bar');
+    if (element) {
+      element.style.width = `${this.progressRaised * 100}%`;
+    }
   }
 
   private changeAnimation(id: string): void {
@@ -479,6 +407,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     if (type === 'ACCOUNT-CHANGED') {
+      this.restoreDepositInputs();
       this.notificationObj.text = `Account changed: ${this.fullAccount}`;
       this.notificationObj.type = 'success';
     }
@@ -498,9 +427,38 @@ export class AppComponent implements OnInit, OnDestroy {
       this.notificationObj.type = 'success';
     }
 
+    if (type === 'address-referred') {
+      this.notificationObj.text = 'This address already referred! Please enter another wallet to refer.';
+      this.notificationObj.type = 'warning';
+    }
+
+    if (type === 'same-account-and-address') {
+      this.notificationObj.text = 'You cannot refer yourself! Please enter your friends address.';
+      this.notificationObj.type = 'warning';
+    }
+
+    if (type === 'bad-address') {
+      this.notificationObj.text = 'Incorrect wallet address!';
+      this.notificationObj.type = 'warning';
+    }
+
+    if (type === 'wallet-not-connected') {
+      this.notificationObj.text = 'Please connect your wallet to refer a friend!';
+      this.notificationObj.type = 'warning';
+    }
+
     this.notificationAnimationStatus = 'show';
     setTimeout(() => {
       this.notificationAnimationStatus = 'hide';
     }, 3300);
+  }
+
+  private restoreDepositInputs(): void {
+    this.bnbAmount = undefined;
+    this.alphaTokenAmount = undefined;
+    this.referralAddress = undefined;
+    this.referralInput = undefined;
+    this.referredPrice = undefined;
+    this.referralAccount = undefined;
   }
 }

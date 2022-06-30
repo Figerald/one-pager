@@ -61,7 +61,7 @@
         </div>
         <div class="row justify-content-center">
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn main-btn btn-outline-light mr-2"><a href="../assets/pdf/Alpha token - whitepaper v6.pdf" target="_blank">Whitepaper</a></button>
+                <button type="button" class="btn main-btn btn-outline-light mr-2"><a href="https://lightpaper.alphahuntsman.com/" target="_blank">Lightpaper</a></button>
                 <button type="button" class="btn main-btn btn-outline-light ml-2" (click)="scroll(goal)">Presale</button>
             </div>
         </div>
@@ -96,15 +96,32 @@
   <div class="presale--wrapper py-5">
     <div class="presale--wrapper_text mb-4">
       <h3>Wallet information</h3>
+      <p>{{ fullAccount }}</p>
     </div>
     <div class="presale--wrapper_account">
+      <table class="presale--table">
+        <tr>
+          <th class="presale--table_head">Date</th>
+          <th class="presale--table_head">Alpha token contribution</th>
+          <th class="presale--table_head">Price</th>
+        </tr>
+        <tr *ngIf="!walletInformation">
+          <td class="presale--table_text">-</td>
+          <td class="presale--table_text">-</td>
+          <td class="presale--table_text">-</td>
+        </tr>
+        <tr *ngFor="let data of walletInformation">
+          <td class="presale--table_text">{{ data.created_at | date }}</td>
+          <td class="presale--table_text">{{ data.alphaToken }}</td>
+          <td class="presale--table_text">{{ data.price }}</td>
+        </tr>
+      </table>
+    </div>
+    <hr>
+    <div class="presale--wrapper_account" *ngIf="walletInformation">
       <div class="presale--wrapper_text">
-        <p>Address</p>
-        <p>{{ fullAccount }}</p>
-      </div>
-      <div class="presale--wrapper_text">
-        <p>Alpha token contribution</p>
-        <p>{{ accountAlphaTokenDeposit }}</p>
+        <h6>Referred addresses</h6>
+        <p *ngFor="let data of walletInformation">{{ data.referredAddress }}</p>
       </div>
     </div>
   </div>
@@ -131,12 +148,7 @@
           BNB
         </div>
       </div>
-      <!-- <div class="d-flex justify-content-center py-2">
-        <div class="presale--form_icon" (click)="convertBnbToAlpha()">
-          <i data-feather="arrow-down-circle" height="24" width="24" stroke-width="2"></i>
-        </div>
-      </div> -->
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center mb-3">
         <input type="number"
                name="alpha"
                id="alpha-amount"
@@ -149,25 +161,29 @@
           ALPX
         </div>
       </div>
+      <div class="d-flex justify-content-center flex-column">
+        <label for="refer-address" class="presale--form_label">Refer a friend and get bonus token!</label>
+        <div class="d-flex">
+          <input type="text"
+                 name="refer-address"
+                 id="refer-address"
+                 class="presale--form_input"
+                 placeholder="Referral wallet address"
+                 [(ngModel)]="referralInput"
+                 (ngModelChange)="checkReferredAddress()">
+          <div class="d-flex justify-content-center align-items-center mx-2"
+               placement="bottom"
+               ngbTooltip="If you have been referred by a friend, enter his wallet address for a 20% bonus of the amount you are reserving for an airdrop each. In addition, ALPX to BNB increases as we continue to raise funds towards our goal but we'll look up your friends' price (more ALPX for the same BNB) to give you even more benefits! Shout out to any of your friends if they might be interested and don't forget to give your wallet address to get referral benefits">
+            <i data-feather="help-circle" height="24" width="24" stroke-width="2" class="ml-1"></i>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="d-flex justify-content-center pt-5">
-      <!-- <button type="button"
-              class="btn main-btn btn-outline-light mr-2"
-              placement="bottom"
-              ngbTooltip="Refer wallet address and get better price plus bonus tokens"
-              [disabled]="isReferButtonDisabled"
-              (click)="openReferModal($event)">{{ isReferButtonDisabled ? 'Bonus added!' : 'Refer a friend' }}
-        <i data-feather="help-circle" height="16" width="16" stroke-width="2" class="ml-1"></i>
-      </button> -->
       <button type="button" class="btn main-btn btn-outline-light" (click)="openConnectWalletModal($event)" *ngIf="!fullAccount; else buyToken">Connect Wallet</button>
       <ng-template #buyToken>
         <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()">Reserve token</button>
       </ng-template>
-    </div>
-    <div class="presale--wrapper_text mt-3">
-      <a placement="bottom" ngbTooltip="Refer wallet address and get better price plus bonus tokens" (click)="openReferModal($event)">
-        Refer a friend and get better price! <i data-feather="info" height="16" width="16" stroke-width="2" class="ml-1"></i>
-      </a>
     </div>
   </div>
 </div>
@@ -204,7 +220,7 @@
             <div class="roadmap-line"></div>
           </div>
         </div>
-        <div class="col-2">
+        <div class="col-6 mr-3">
           <div>
             <div class="roadmap-plan">
               <p class="roadmap-plan_heading">Product development</p>
@@ -218,8 +234,8 @@
             <div class="roadmap-line"></div>
           </div>
         </div>
-        <div class="col-1"></div>
-        <div class="col-5 d-flex align-items-end">
+        <!-- <div class="col-1"></div> -->
+        <div class="col-2 d-flex align-items-end">
           <div>
             <div class="roadmap-plan">
               <p class="roadmap-plan_heading">Expansion</p>
@@ -232,33 +248,33 @@
         </div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-2 mr-3 roadmap-horizontal roadmap-1">
+        <div class="col-2 roadmap-horizontal roadmap-1">
           <div class="roadmap-y2">
-            <div class="roadmap-quarter q-position">Q2</div>
+            <div class="roadmap-quarter q-position">Q3</div>
+            <div class="roadmap-quarter q-position q4">Q4</div>
           </div>
           <div class="roadmap-date">
             2022
           </div>
         </div>
-        <div class="col-2 roadmap-horizontal roadmap-2">
-          <div class="roadmap-y2">
-            <div class="roadmap-quarter q-position">Q3</div>
-            <div class="roadmap-quarter q-position q4">Q4</div>
-          </div>
-        </div>
-        <div class="col-1"></div>
-        <div class="col-5 roadmap-horizontal roadmap-3">
+        <div class="col-6 mx-3 roadmap-horizontal roadmap-2">
           <div class="roadmap-y2">
             <div class="roadmap-quarter q-position">Q1</div>
-            <div class="roadmap-quarter q-position q6">Q2</div>
-            <div class="roadmap-quarter q-position q7">Q3</div>
-            <div class="roadmap-quarter q-position q8">Q4</div>
-            <div class="roadmap-quarter q-position q4">Q1</div>
+            <div class="roadmap-quarter q-position q2">Q2</div>
+            <div class="roadmap-quarter q-position q3">Q3</div>
+            <div class="roadmap-quarter q-position q4">Q4</div>
           </div>
           <div class="roadmap-date">
             2023
           </div>
-          <div class="roadmap-date r-15">
+        </div>
+        <!-- <div class="col-1"></div> -->
+        <div class="col-2 roadmap-horizontal roadmap-3">
+          <div class="roadmap-y2">
+            <div class="roadmap-quarter q-position">Q1</div>
+            <div class="roadmap-quarter q-position q4">Q2</div>
+          </div>
+          <div class="roadmap-date">
             2024
           </div>
         </div>
@@ -268,7 +284,10 @@
       <div class="row mb-3">
         <div class="roadmap-vertical-container justify-content-center d-flex left-0">
           <div class="roadmap-vertical roadmap-vertical-1 mr-1"></div>
-          <div class="roadmap-quarter">Q2</div>
+          <div class="d-flex justify-content-between flex-column">
+            <div class="roadmap-quarter">Q3</div>
+            <div class="roadmap-quarter">Q4</div>
+          </div>
           <div class="roadmap-vertical-line mx-1"></div>
           <div class="roadmap-vertical-plan">
             <p class="roadmap-plan_heading">Fund rasing</p>
@@ -278,10 +297,12 @@
           </div>
         </div>
       </div>
-      <div class="row mb-5">
+      <div class="row mb-3">
         <div class="roadmap-vertical-container justify-content-center d-flex">
           <div class="roadmap-vertical roadmap-vertical-2 mr-1"></div>
           <div class="d-flex justify-content-between flex-column">
+            <div class="roadmap-quarter">Q1</div>
+            <div class="roadmap-quarter">Q2</div>
             <div class="roadmap-quarter">Q3</div>
             <div class="roadmap-quarter">Q4</div>
           </div>
@@ -303,9 +324,6 @@
           <div class="d-flex justify-content-between flex-column">
             <div class="roadmap-quarter">Q1</div>
             <div class="roadmap-quarter">Q2</div>
-            <div class="roadmap-quarter">Q3</div>
-            <div class="roadmap-quarter">Q4</div>
-            <div class="roadmap-quarter">Q1</div>
           </div>
           <div class="roadmap-vertical-line mx-1"></div>
           <div class="roadmap-vertical-plan">
@@ -512,14 +530,6 @@
           <img src="../assets/images/logo.webp" alt="Alpha Huntsman logo" class="logo-image">
           <p class="footer--small-text">Tracking the world one data at the time.</p>
         </div>
-        <!-- <div class="d-flex footer--newsletter">
-          <div class="mb-4">
-            <input type="text" placeholder="Join our newsletter" class="footer--input" [formControl]="subscribeForm">
-          </div>
-          <div class="mt-3">
-            <button type="button" class="btn main-btn btn-outline-light" (click)="submit()">Subscribe</button>
-          </div>
-        </div> -->
       </div>
       <div class="col-0 col-md-2"></div>
       <div class="col-6 col-md-3">
@@ -585,29 +595,17 @@
     <button type="button" class="btn main-btn btn-outline-light m-3 logOut" (click)="logOut()">Logout</button>
   </div>
 </div>
-<!-- Refer modal -->
-<div class="ah-modal" *ngIf="isReferModalOpen" [@slide-in-modal]="referState">
-  <div class="ah-modal--container p-4" (click)="$event.stopPropagation()">
-    <h3>Refer a friend</h3>
-    <div class="d-flex flex-column align-items-center" *ngIf="!walletNotConnected">
-      <p class="ah-modal--container_text">Enter friend wallet address and get better price and bonus token!</p>
-      <input type="text" name="refer" id="refer-friend" [(ngModel)]="referredAddress" placeholder="Wallet address to refer" class="ah-modal--container_input">
-      <p class="ah-modal--warning" *ngIf="referAddressEmpty">Please enter wallet address</p>
-      <p class="ah-modal--warning" *ngIf="invalidReferAddress">Please enter valid wallet address!</p>
-      <p class="ah-modal--warning" *ngIf="addressAlreadyReferred">This account has been referred!</p>
-      <button type="button" class="btn main-btn btn-outline-light m-3 logOut" (click)="referFriend()">Submit</button>
-    </div>
-    <div class="d-flex flex-column align-items-center" *ngIf="walletNotConnected">
-      <p class="ah-modal--container_text">Please connect your wallet first!</p>
-      <button type="button" class="btn main-btn btn-outline-light m-3 logOut" (click)="connectWallet()">Connect Wallet</button>
-    </div>
-  </div>
-</div>
 <!-- Notification -->
-<div class="notification notification-{{notificationObj.type}}" [@fade-in-notification]="notificationAnimationStatus">
+<div class="notification notification-success" *ngIf="referredAccountData && !referredAccountData.isReferComplete" [@fade-in-notification]="referralAnimationStatus">
+  <p>You have been referred by another account, deposit token and get bonus!</p>
+</div>
+<!-- <div class="notification notification-warning" *ngIf="referredAccountData && referredAccountData.isReferComplete">
+  <p>You have used your referral!</p>
+</div> -->
+<div class="notification notification-{{notificationObj.type}}" [ngClass]="{ 'bottom-65': referredAccountData }" [@fade-in-notification]="notificationAnimationStatus">
   <p>{{ notificationObj.text }}</p>
 </div>
-<div class="notification notification-info" [@fade-in-notification-info]="balanceAnimationState">
+<div class="notification notification-info" [ngClass]="{ 'bottom-115': referredAccountData }" [@fade-in-notification-info]="balanceAnimationState">
   <p>Your balance: {{ accountCurrentBalance }}</p>
 </div>
 <div class="loading" *ngIf="isLoading">

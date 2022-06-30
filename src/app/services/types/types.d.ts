@@ -24,10 +24,19 @@ export type TokenPricingData = {
     priceStart: number,
     priceEnd: number,
     progressStart: number,
-    progressEnd: number
+    progressEnd: number,
+    progressRaised: number
 };
 
 export type ReferralData = {
     address: string,
-    isReferred: boolean
+    referredAddress: string,
+    isReferComplete: boolean
+}
+
+export type WalletInformation = {
+    alphaToken: number,
+    price: number,
+    referredAddress: string,
+    created_at: Date
 }
