@@ -34,13 +34,6 @@ export class TokenCalculationService {
         await lastValueFrom(this.http.put<ApiResponse<TokenPricingData>>('https://api.alphahuntsman.com/token/pricing', { progressRaised, amountRaised }));
     }
 
-    public async getReferralPrice(address: string, referredAddress: string): Promise<number> {
-        const price: ApiResponse<{ price: number }> =
-            await lastValueFrom(this.http.get<ApiResponse<{ price: number }>>(`https://api.alphahuntsman.com/token?address=${address}&referredAddress=${referredAddress}`));
-
-        return price.data[0].price;
-    }
-
     private async getTokenPricingData(): Promise<ApiResponse<TokenPricingData>> {
         return await lastValueFrom(this.http.get<ApiResponse<TokenPricingData>>('https://api.alphahuntsman.com/token/pricing'));
     }

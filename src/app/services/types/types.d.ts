@@ -31,6 +31,7 @@ export type TokenPricingData = {
 export type ReferralData = {
     address: string,
     referredAddress: string,
+    price: number,
     isReferComplete: boolean
 }
 

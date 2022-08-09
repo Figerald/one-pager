@@ -118,10 +118,10 @@
       </table>
     </div>
     <hr>
-    <div class="presale--wrapper_account" *ngIf="walletInformation">
+    <div class="presale--wrapper_account" *ngIf="referredAddresses && referredAddresses.length > 0">
       <div class="presale--wrapper_text">
         <h6>Referred addresses</h6>
-        <p *ngFor="let data of walletInformation">{{ data.referredAddress }}</p>
+        <p *ngFor="let data of referredAddresses">{{ data.referredAddress }}</p>
       </div>
     </div>
   </div>
@@ -173,7 +173,7 @@
                  (ngModelChange)="checkReferredAddress()">
           <div class="d-flex justify-content-center align-items-center mx-2"
                placement="bottom"
-               ngbTooltip="If you have been referred by a friend, enter his wallet address for a 20% bonus of the amount you are reserving for an airdrop each. In addition, ALPX to BNB increases as we continue to raise funds towards our goal but we'll look up your friends' price (more ALPX for the same BNB) to give you even more benefits! Shout out to any of your friends if they might be interested and don't forget to give your wallet address to get referral benefits">
+               ngbTooltip="If you have been referred by a friend, enter his wallet address for a 10% bonus of the amount you are reserving for an airdrop each. In addition, ALPX to BNB increases as we continue to raise funds towards our goal but we'll look up your friends' price (more ALPX for the same BNB) to give you even more benefits! Shout out to any of your friends if they might be interested and don't forget to give your wallet address to get referral benefits">
             <i data-feather="help-circle" height="24" width="24" stroke-width="2" class="ml-1"></i>
           </div>
         </div>

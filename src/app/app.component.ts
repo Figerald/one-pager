@@ -44,10 +44,9 @@ export class AppComponent implements OnInit, OnDestroy {
   // Referred account data
   public referredAccountData: ReferralData | undefined;
   // Account which referred another account
-  public referralAccount: string | undefined;
   public accountLoggedIn: boolean = false;
   public referralInput: string | undefined;
-  public referralAddress: string | undefined;
+  public referralPrice: number | undefined;
   public walletNotConnected = false;
   public progressRaised: number = 0.4;
   public notificationObj = {
@@ -74,12 +73,12 @@ export class AppComponent implements OnInit, OnDestroy {
   public alphaTokenAmount: number | undefined;
   public bnbAmount: number | undefined;
   public walletInformation: WalletInformation[] | undefined;
+  public referredAddresses: { referredAddress: string }[] | undefined;
   public accountCurrentBalance: string | undefined;
   public lottieOptions: AnimationOptions = {
     path: '/assets/animations.json'
   };
   public chartOptions: any = chartOptions;
-  private referredPrice: number | undefined;
   private destroy$: Subject<void> = new Subject();
 
   @HostListener('window:scroll', ['$event']) public onScroll(): void {
@@ -117,10 +116,11 @@ export class AppComponent implements OnInit, OnDestroy {
       if (account) {
         this.account = `${account.substring(0, 4)}...${account.slice(-4)}`;
         this.fullAccount = account;
-        this.referredAccountData = await this.referralService.getReferredAddress(this.fullAccount);
-        if (this.referredAccountData && this.referredAccountData.address && !this.referredAccountData.isReferComplete) {
+        this.referredAccountData = await this.referralService.getReferredAccountData(this.fullAccount);
+        if (this.referredAccountData && !this.referredAccountData.isReferComplete) {
           this.referralAnimationStatus = 'show';
-          this.referralAccount = this.referredAccountData.address;
+        } else {
+          this.referredAccountData = undefined;
         }
       }
     });
@@ -134,6 +134,8 @@ export class AppComponent implements OnInit, OnDestroy {
         }, 2500);
       }
     });
+
+    this.referralService.getReferredAddresses.pipe(takeUntil(this.destroy$)).subscribe(data => this.referredAddresses = data);
 
     this.accountBalanceService.getAlphaTokenDeposit.pipe(takeUntil(this.destroy$)).subscribe(data => {
       if (data && data.length > 0) {
@@ -232,11 +234,11 @@ export class AppComponent implements OnInit, OnDestroy {
   public async sendToken(): Promise<void> {
     if (this.bnbAmount) {
       this.isLoading = true;
-      if (this.referredAccountData && this.referredPrice) {
-        await this.web3Service.sendReferralTransaction(this.bnbAmount, this.referredPrice, this.referredAccountData);
+      if (this.referredAccountData) {
         this.referredAccountData.isReferComplete = true;
+        await this.web3Service.sendReferralTransaction(this.bnbAmount, this.referredAccountData.price, this.referredAccountData);
       } else {
-        await this.web3Service.sendTransaction(this.bnbAmount, this.referralAddress);
+        await this.web3Service.sendTransaction(this.bnbAmount, this.referralInput);
       }
       this.restoreDepositInputs();
     } else {
@@ -247,9 +249,9 @@ export class AppComponent implements OnInit, OnDestroy {
   public async convertBnbToAlpha(): Promise<number | undefined> {
     if (this.bnbAmount) {
       // Calc for referred address
-      if (this.referredPrice) {
-        const price: number = Math.round(this.bnbAmount * this.referredPrice * 10000) / 10000;
-        return this.alphaTokenAmount = price * 1.2;
+      if (this.referredAccountData) {
+        const price: number = Math.round(this.bnbAmount * this.referredAccountData.price * 10000) / 10000;
+        return this.alphaTokenAmount = Math.round(price * 1.1 * 10000) / 10000;
       }
       const price: number = await this.tokenCalculationService.calculatePrice(this.bnbAmount);
       return this.alphaTokenAmount = Math.round(this.bnbAmount * price * 10000) / 10000;
@@ -268,24 +270,35 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.referralInput) {
       // Check if address is valid ETH wallet address
       if (!this.web3Service.checkWalletAddress(this.referralInput)) return this.handleNotification('bad-address');
+      // START ANIMATION AND STOP FROM ADDING INPUT
       
       // Check if referred address is not the same connected
       if (this.fullAccount && this.fullAccount.toLowerCase() === this.referralInput.toLowerCase()) {
         return this.handleNotification('same-account-and-address');
       }
-
-      // Calc price for referred address
-      if (this.referralAccount && this.referralInput.toLowerCase() === this.referralAccount.toLowerCase()) {
-        return this.calcReferredAddressPrice();
-      }
-
+      
       // Check if address is referred
-      const referralData: ReferralData | undefined = await this.referralService.getReferredAddress(this.referralInput);
-      if (referralData && referralData.referredAddress.toLowerCase() === this.referralInput.toLowerCase()) {
-        return this.handleNotification('address-referred');
+      const referralInputData: ReferralData | undefined = await this.referralService.getReferredAccountData(this.referralInput);
+      if (referralInputData && referralInputData.referredAddress.toLowerCase() === this.referralInput.toLowerCase()) {
+        return this.handleNotification('already-referred');
       }
 
-      this.referralAddress = this.referralInput;
+      // Address referred, saving refer data
+      let price: number;
+      if (this.referredAccountData) {
+        price = this.referredAccountData.price;
+      } else {
+        price = await this.tokenCalculationService.calculatePrice(0);
+      }
+      const referralData: ReferralData = {
+        address: this.fullAccount,
+        referredAddress: this.referralInput,
+        price: price,
+        isReferComplete: false
+      };
+
+      await this.referralService.saveReferAddress(referralData);
+      this.handleNotification('refer-success');
     }
   }
 
@@ -295,14 +308,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.destroy$.next();
-  }
-
-  private async calcReferredAddressPrice(): Promise<void> {
-    // fullAccount is referredAddress and referralInput the address who referred
-    if (this.fullAccount && this.referralInput) {
-      this.referredPrice = await this.tokenCalculationService.getReferralPrice(this.referralInput, this.fullAccount);
-      this.handleNotification('refer-success');
-    }
   }
 
   private setProgressBar(): void {
@@ -422,12 +427,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.notificationObj.type = 'warning';
     }
 
-    if (type === 'refer-success') {
-      this.notificationObj.text = 'Referral added successfully!';
-      this.notificationObj.type = 'success';
-    }
-
-    if (type === 'address-referred') {
+    if (type === 'already-referred') {
       this.notificationObj.text = 'This address already referred! Please enter another wallet to refer.';
       this.notificationObj.type = 'warning';
     }
@@ -447,6 +447,11 @@ export class AppComponent implements OnInit, OnDestroy {
       this.notificationObj.type = 'warning';
     }
 
+    if (type === 'refer-success') {
+      this.notificationObj.text = `${this.referralInput} Address referred successfully!`;
+      this.notificationObj.type = 'success';
+    }
+
     this.notificationAnimationStatus = 'show';
     setTimeout(() => {
       this.notificationAnimationStatus = 'hide';
@@ -456,9 +461,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private restoreDepositInputs(): void {
     this.bnbAmount = undefined;
     this.alphaTokenAmount = undefined;
-    this.referralAddress = undefined;
     this.referralInput = undefined;
-    this.referredPrice = undefined;
-    this.referralAccount = undefined;
   }
 }
