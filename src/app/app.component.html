@@ -92,34 +92,34 @@
   </div>
 </div>
 <!-- Wallet information -->
-<div class="container p-5 d-flex justify-content-center" *ngIf="fullAccount">
-  <div class="presale--wrapper py-5">
-    <div class="presale--wrapper_text mb-4">
+<div class="container wallet d-flex justify-content-center" *ngIf="fullAccount">
+  <div class="wallet--wrapper py-5">
+    <div class="wallet--wrapper_text mb-4">
       <h3>Wallet information</h3>
       <p>{{ fullAccount }}</p>
     </div>
-    <div class="presale--wrapper_account">
-      <table class="presale--table">
+    <div class="wallet--wrapper_account">
+      <table class="wallet--table">
         <tr>
-          <th class="presale--table_head">Date</th>
-          <th class="presale--table_head">Alpha token contribution</th>
-          <th class="presale--table_head">Price</th>
+          <th class="wallet--table_head">Date</th>
+          <th class="wallet--table_head">Alpha token contribution</th>
+          <th class="wallet--table_head">Price</th>
         </tr>
         <tr *ngIf="!walletInformation">
-          <td class="presale--table_text">-</td>
-          <td class="presale--table_text">-</td>
-          <td class="presale--table_text">-</td>
+          <td class="wallet--table_text">-</td>
+          <td class="wallet--table_text">-</td>
+          <td class="wallet--table_text">-</td>
         </tr>
         <tr *ngFor="let data of walletInformation">
-          <td class="presale--table_text">{{ data.created_at | date }}</td>
-          <td class="presale--table_text">{{ data.alphaToken }}</td>
-          <td class="presale--table_text">{{ data.price }}</td>
+          <td class="wallet--table_text">{{ data.created_at | date }}</td>
+          <td class="wallet--table_text">{{ data.alphaToken }}</td>
+          <td class="wallet--table_text">{{ data.price }}</td>
         </tr>
       </table>
     </div>
     <hr>
-    <div class="presale--wrapper_account" *ngIf="referredAddresses && referredAddresses.length > 0">
-      <div class="presale--wrapper_text">
+    <div class="wallet--wrapper_account" *ngIf="referredAddresses && referredAddresses.length > 0">
+      <div class="wallet--wrapper_text">
         <h6>Referred addresses</h6>
         <p *ngFor="let data of referredAddresses">{{ data.referredAddress }}</p>
       </div>
@@ -134,21 +134,27 @@
       <p>Change BNB to Alphahuntsman token</p>
     </div>
     <div class="presale--form">
-      <div class="d-flex justify-content-center mb-4">
+      <div class="d-flex justify-content-center mb-3">
         <input type="number"
                name="bnb"
                id="bnb-amount"
                min="0"
+               max="10000000"
+               step="0.1"
                class="presale--form_input"
                [(ngModel)]="bnbAmount"
                (ngModelChange)="convertBnbToAlpha()"
                placeholder="BNB Amount">
         <div class="presale--form_logo">
-          <img src="../assets/images/Binance.svg" alt="Binance logo">
-          BNB
+          <div class="presale--form_logo-image">
+            <img src="../assets/images/Binance.svg" alt="Binance logo">
+          </div>
+          <div>
+            BNB
+          </div>
         </div>
       </div>
-      <div class="d-flex justify-content-center mb-3">
+      <div class="d-flex justify-content-center mb-2">
         <input type="number"
                name="alpha"
                id="alpha-amount"
@@ -157,24 +163,40 @@
                [(ngModel)]="alphaTokenAmount"
                disabled>
         <div class="presale--form_logo">
-          <img src="../assets/images/token_small_icon.png" alt="Alphahuntsman token logo">
-          ALPX
+          <div class="presale--form_logo-image">
+            <img src="../assets/images/token_small_icon.png" alt="Alphahuntsman token logo">
+          </div>
+          <div>
+            ALPX
+          </div>
         </div>
       </div>
+      <div class="d-flex justify-content-center flex-column mb-2" *ngIf="bonusAlphaToken">
+        <label for="bonus-amount" class="presale--form_label">Bonus Alpha token from referral:</label>
+        <input type="number"
+               name="alpha"
+               id="bonus-amount"
+               class="presale--form_input w-500"
+               placeholder="Corresponding Alpha token amount"
+               [(ngModel)]="bonusAlphaToken"
+               disabled>
+      </div>
       <div class="d-flex justify-content-center flex-column">
-        <label for="refer-address" class="presale--form_label">Refer a friend and get bonus token!</label>
-        <div class="d-flex">
+        <label for="refer-address" class="presale--form_label">If you have been referred, add friends address to get bonus!</label>
+        <div class="d-flex position-relative">
           <input type="text"
                  name="refer-address"
                  id="refer-address"
-                 class="presale--form_input"
-                 placeholder="Referral wallet address"
-                 [(ngModel)]="referralInput"
-                 (ngModelChange)="checkReferredAddress()">
+                 class="presale--form_input w-500"
+                 placeholder="Friends wallet address"
+                 [formControl]="referralAddressControl">
           <div class="d-flex justify-content-center align-items-center mx-2"
                placement="bottom"
                ngbTooltip="If you have been referred by a friend, enter his wallet address for a 10% bonus of the amount you are reserving for an airdrop each. In addition, ALPX to BNB increases as we continue to raise funds towards our goal but we'll look up your friends' price (more ALPX for the same BNB) to give you even more benefits! Shout out to any of your friends if they might be interested and don't forget to give your wallet address to get referral benefits">
             <i data-feather="help-circle" height="24" width="24" stroke-width="2" class="ml-1"></i>
+          </div>
+          <div class="presale--form_loading" *ngIf="isCheckingAddress && referralInput">
+            <ng-lottie width="60px" height="60px" [options]="lottieOptions"></ng-lottie>
           </div>
         </div>
       </div>
@@ -250,8 +272,7 @@
       <div class="row justify-content-center">
         <div class="col-2 roadmap-horizontal roadmap-1">
           <div class="roadmap-y2">
-            <div class="roadmap-quarter q-position">Q3</div>
-            <div class="roadmap-quarter q-position q4">Q4</div>
+            <div class="roadmap-quarter q-position">Q4</div>
           </div>
           <div class="roadmap-date">
             2022
@@ -285,7 +306,6 @@
         <div class="roadmap-vertical-container justify-content-center d-flex left-0">
           <div class="roadmap-vertical roadmap-vertical-1 mr-1"></div>
           <div class="d-flex justify-content-between flex-column">
-            <div class="roadmap-quarter">Q3</div>
             <div class="roadmap-quarter">Q4</div>
           </div>
           <div class="roadmap-vertical-line mx-1"></div>
@@ -596,16 +616,10 @@
   </div>
 </div>
 <!-- Notification -->
-<div class="notification notification-success" *ngIf="referredAccountData && !referredAccountData.isReferComplete" [@fade-in-notification]="referralAnimationStatus">
-  <p>You have been referred by another account, deposit token and get bonus!</p>
-</div>
-<!-- <div class="notification notification-warning" *ngIf="referredAccountData && referredAccountData.isReferComplete">
-  <p>You have used your referral!</p>
-</div> -->
-<div class="notification notification-{{notificationObj.type}}" [ngClass]="{ 'bottom-65': referredAccountData }" [@fade-in-notification]="notificationAnimationStatus">
+<div class="notification notification-{{notificationObj.type}}" [@fade-in-notification]="notificationAnimationStatus">
   <p>{{ notificationObj.text }}</p>
 </div>
-<div class="notification notification-info" [ngClass]="{ 'bottom-115': referredAccountData }" [@fade-in-notification-info]="balanceAnimationState">
+<div class="notification notification-info" [@fade-in-notification-info]="balanceAnimationState">
   <p>Your balance: {{ accountCurrentBalance }}</p>
 </div>
 <div class="loading" *ngIf="isLoading">

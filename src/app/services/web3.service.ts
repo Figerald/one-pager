@@ -48,7 +48,7 @@ export class Web3Service {
     return true;
   }
 
-  public async sendTransaction(value: number, referAddress?: string): Promise<void> {
+  public async sendTransaction(value: number): Promise<void> {
     if (!this.verifyMetaMask()) return;
     if (!await this.getChainId()) return;
 
@@ -70,30 +70,19 @@ export class Web3Service {
 
       const [price, progressRaised] = await Promise.all([this.tokenCalculationService.calculatePrice(value), this.tokenCalculationService.calculateProgress(value)]);
       // Calc alpha token amount
-      let alphaToken: number = Math.round(value * price * 10000) / 10000;
+      let alphaToken: number = Math.round(value * price * 100) / 100;
       
       // Update Alpha token price and save data to DB
-      await Promise.all([this.tokenCalculationService.updateTokenPrice(progressRaised, alphaToken), this.accountBalanceService.saveAccountTokenData(result.from, alphaToken, price, value, referAddress)])
+      await Promise.all([this.tokenCalculationService.updateTokenPrice(progressRaised, alphaToken), this.accountBalanceService.saveAccountTokenData(result.from, alphaToken, price, value)])
       // Updating account tokens transactions data
-      await this.accountBalanceService.getAccountTokens(result.from);
-      // Check
-      if (referAddress) {
-        const referData: ReferralData = {
-          address,
-          referredAddress: referAddress,
-          price,
-          isReferComplete: false
-        }
-        await this.referralService.saveReferAddress(referData);
-      }
-      await this.referralService.getReferredAddressesData(result.from);
+      await this.accountBalanceService.updateAccountData(result.from);
     }).catch(error => {
       this.setResultsStatus.next('TRANSACTION-FAILED');
       this.loadingService.setLoading(false);
     });
   }
 
-  public async sendReferralTransaction(value: number, price: number, referralData: ReferralData) {
+  public async sendReferralTransaction(value: number, price: number, referralAddress: string) {
     if (!this.verifyMetaMask()) return;
     if (!await this.getChainId()) return;
 
@@ -106,29 +95,27 @@ export class Web3Service {
       to: this.toAddress,
       value: bnbAmount
     }).then(async (result) => {
-       // Set loading animation status
-       this.loadingService.setLoading(false);
+      // Set loading animation status
+      this.loadingService.setLoading(false);
 
-       // Set status of action
-       this.setResultsStatus.next('TRANSACTION-COMPLETED');
+      // Set status of action
+      this.setResultsStatus.next('TRANSACTION-COMPLETED');
 
-       // Calc alpha token amount
-      const alphaTokenWithoutRef: number = Math.round(value * price * 10000) / 10000;
-      const alphaTokenWithRef = alphaTokenWithoutRef * 1.1;
-      this.referralService.updateReferData(referralData);
+      // Calc alpha token amount
+      const alphaToken: number = Math.round(value * price * 100) / 100;
+      const alphaTokenBonus = alphaToken * 0.1;
       const progressRaised: number = await this.tokenCalculationService.calculateProgress(value);
 
       // Update Alpha token price and save data to DB
       await Promise.all([
-        this.tokenCalculationService.updateTokenPrice(progressRaised, alphaTokenWithRef),
-        this.accountBalanceService.saveAccountTokenData(result.from, alphaTokenWithRef, price, value),
+        this.tokenCalculationService.updateTokenPrice(progressRaised, alphaToken),
+        this.accountBalanceService.saveAccountTokenData(result.from, alphaToken, price, value),
+        this.accountBalanceService.saveAccountTokenData(result.from, alphaTokenBonus, price, 0),
       ]);
-      await this.referralService.getReferredAddressesData(result.from);
       // Updating account tokens transactions data
-      await this.accountBalanceService.getAccountTokens(result.from);
+      await this.accountBalanceService.updateAccountData(result.from);
 
-      const alphaTokenRef: number = alphaTokenWithoutRef * 0.1;
-      await this.accountBalanceService.saveAccountTokenData(referralData.address, alphaTokenRef, price, 0);
+      await this.accountBalanceService.saveAccountTokenData(referralAddress, alphaTokenBonus, price, 0);
       // 2. Check progress raised issue
     }).catch(error => {
       this.setResultsStatus.next('TRANSACTION-FAILED');
@@ -194,7 +181,7 @@ export class Web3Service {
         .then(async accounts => {
           this.currentAccount.next(accounts[0]);
           this.setResultsStatus.next('success');
-          await this.accountBalanceService.getAccountTokens(accounts[0]);
+          await this.accountBalanceService.updateAccountData(accounts[0]);
           await this.referralService.getReferredAddressesData(accounts[0]);
           this.getBalance(accounts[0]);
         })
@@ -213,7 +200,7 @@ export class Web3Service {
       // send account string
       this.currentAccount.next(accounts[0]);
       this.setResultsStatus.next('success');
-      await this.accountBalanceService.getAccountTokens(accounts[0]);
+      await this.accountBalanceService.updateAccountData(accounts[0]);
       await this.referralService.getReferredAddressesData(accounts[0]);
       this.getBalance(accounts[0]);
     }
@@ -271,7 +258,7 @@ export class Web3Service {
       this.currentAccount.next(accounts[0]);
       this.setResultsStatus.next('ACCOUNT-CHANGED');
       this.getBalance(accounts[0]);
-      await this.accountBalanceService.getAccountTokens(accounts[0]);
+      await this.accountBalanceService.updateAccountData(accounts[0]);
       await this.referralService.getReferredAddressesData(accounts[0]);
     });
 

@@ -18,7 +18,7 @@ export class TokenCalculationService {
 
     public async calculatePrice(bnbAmount: number): Promise<number> {
         const pricing: TokenPricingData = await this.getTokenPricingData().then(result => result.data[0]);
-        const priceToCalc: number = Math.round((pricing.priceStart + (pricing.priceEnd - pricing.priceStart) * ((pricing.amountRaised + bnbAmount) / pricing.amountEnd)) * 10000) / 10000;
+        const priceToCalc: number = Math.round((pricing.priceStart + (pricing.priceEnd - pricing.priceStart) * ((pricing.amountRaised + bnbAmount) / pricing.amountEnd)) * 100) / 100;
 
         return priceToCalc;
     }

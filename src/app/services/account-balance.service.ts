@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
-import { WalletInformation } from './types/types';
+import { ApiResponse, WalletInformation } from './types/types';
 
 @Injectable({
     providedIn: 'root'
@@ -22,11 +22,17 @@ export class AccountBalanceService {
         }
     }
 
-    public async getAccountTokens(address: string): Promise<void> {
-        const result: { data: WalletInformation[], status: string } =
-            await lastValueFrom(this.http.get<{ data: WalletInformation[], status: string }>(`https://api.alphahuntsman.com/token?address=${address}`));
+    public async updateAccountData(address: string): Promise<void> {
+        const result: ApiResponse<WalletInformation> =
+            await lastValueFrom(this.http.get<ApiResponse<WalletInformation>>(`https://api.alphahuntsman.com/token?address=${address}`));
         if (result && result.data) {
             this.alphaTokenDeposit.next(result.data);
         }
+    }
+
+    public async getAccountData(address: string): Promise<WalletInformation[]> {
+        const result: ApiResponse<WalletInformation> = await lastValueFrom(this.http.get<ApiResponse<WalletInformation>>(`https://api.alphahuntsman.com/token?address=${address}`));
+
+        return result.data;
     }
 }
