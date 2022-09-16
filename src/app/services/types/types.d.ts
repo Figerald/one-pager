@@ -21,6 +21,7 @@ export type TokenPricingData = {
     name: string,
     amountRaised: number,
     amountEnd: number,
+    amountStart: number,
     priceStart: number,
     priceEnd: number,
     progressStart: number,

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import Web3 from 'web3';
-import { ReferralData, ResultTypes } from './types/types';
+import { ResultTypes } from './types/types';
 import { LoadingService } from './loading.service';
 import { AccountBalanceService } from './account-balance.service';
 import { environment } from '../../environments/environment';
 import { TokenCalculationService } from './token-calculation.service';
-import { ReferralService } from './referral.service';
 
 declare global {
   interface Window {
@@ -31,8 +30,7 @@ export class Web3Service {
 
   public constructor(private readonly loadingService: LoadingService,
                      private readonly accountBalanceService: AccountBalanceService,
-                     private readonly tokenCalculationService: TokenCalculationService,
-                     private readonly referralService: ReferralService) {
+                     private readonly tokenCalculationService: TokenCalculationService) {
   }
 
   public verifyMetaMask(): boolean {
@@ -68,9 +66,10 @@ export class Web3Service {
       // Set status of action
       this.setResultsStatus.next('TRANSACTION-COMPLETED');
 
-      const [price, progressRaised] = await Promise.all([this.tokenCalculationService.calculatePrice(value), this.tokenCalculationService.calculateProgress(value)]);
+      const price = await this.tokenCalculationService.calculatePrice();
       // Calc alpha token amount
       let alphaToken: number = Math.round(value * price * 100) / 100;
+      const progressRaised: number = await this.tokenCalculationService.calculateProgress(alphaToken);
       
       // Update Alpha token price and save data to DB
       await Promise.all([this.tokenCalculationService.updateTokenPrice(progressRaised, alphaToken), this.accountBalanceService.saveAccountTokenData(result.from, alphaToken, price, value)])
@@ -103,8 +102,8 @@ export class Web3Service {
 
       // Calc alpha token amount
       const alphaToken: number = Math.round(value * price * 100) / 100;
-      const alphaTokenBonus = alphaToken * 0.1;
-      const progressRaised: number = await this.tokenCalculationService.calculateProgress(value);
+      const alphaTokenBonus = Math.round(alphaToken * 0.1 * 100) / 100;
+      const progressRaised: number = await this.tokenCalculationService.calculateProgress(alphaToken);
 
       // Update Alpha token price and save data to DB
       await Promise.all([
@@ -182,7 +181,6 @@ export class Web3Service {
           this.currentAccount.next(accounts[0]);
           this.setResultsStatus.next('success');
           await this.accountBalanceService.updateAccountData(accounts[0]);
-          await this.referralService.getReferredAddressesData(accounts[0]);
           this.getBalance(accounts[0]);
         })
         .catch(err => {
@@ -201,7 +199,6 @@ export class Web3Service {
       this.currentAccount.next(accounts[0]);
       this.setResultsStatus.next('success');
       await this.accountBalanceService.updateAccountData(accounts[0]);
-      await this.referralService.getReferredAddressesData(accounts[0]);
       this.getBalance(accounts[0]);
     }
   }
@@ -259,7 +256,6 @@ export class Web3Service {
       this.setResultsStatus.next('ACCOUNT-CHANGED');
       this.getBalance(accounts[0]);
       await this.accountBalanceService.updateAccountData(accounts[0]);
-      await this.referralService.getReferredAddressesData(accounts[0]);
     });
 
     this.ethereum.on('chainChanged', () => location.reload());

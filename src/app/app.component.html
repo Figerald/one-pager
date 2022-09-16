@@ -117,13 +117,6 @@
         </tr>
       </table>
     </div>
-    <hr>
-    <div class="wallet--wrapper_account" *ngIf="referredAddresses && referredAddresses.length > 0">
-      <div class="wallet--wrapper_text">
-        <h6>Referred addresses</h6>
-        <p *ngFor="let data of referredAddresses">{{ data.referredAddress }}</p>
-      </div>
-    </div>
   </div>
 </div>
 <!-- Token deposit -->
@@ -142,8 +135,7 @@
                max="10000000"
                step="0.1"
                class="presale--form_input"
-               [(ngModel)]="bnbAmount"
-               (ngModelChange)="convertBnbToAlpha()"
+               [formControl]="bnbAmountControl"
                placeholder="BNB Amount">
         <div class="presale--form_logo">
           <div class="presale--form_logo-image">
@@ -159,6 +151,7 @@
                name="alpha"
                id="alpha-amount"
                class="presale--form_input"
+               step="0.01"
                placeholder="Corresponding Alpha token amount"
                [(ngModel)]="alphaTokenAmount"
                disabled>
@@ -174,16 +167,16 @@
       <div class="d-flex justify-content-center flex-column mb-2" *ngIf="bonusAlphaToken">
         <label for="bonus-amount" class="presale--form_label">Bonus Alpha token from referral:</label>
         <input type="number"
-               name="alpha"
+               name="alpha-bonus"
                id="bonus-amount"
-               class="presale--form_input w-500"
+               class="presale--form_input w-500 mt-2 mb-2"
                placeholder="Corresponding Alpha token amount"
                [(ngModel)]="bonusAlphaToken"
                disabled>
       </div>
       <div class="d-flex justify-content-center flex-column">
         <label for="refer-address" class="presale--form_label">If you have been referred, add friends address to get bonus!</label>
-        <div class="d-flex position-relative">
+        <div class="d-flex position-relative mt-2">
           <input type="text"
                  name="refer-address"
                  id="refer-address"
@@ -200,11 +193,15 @@
           </div>
         </div>
       </div>
+      <div class="d-flex justify-content-start align-items-center mt-2">
+        <input type="checkbox" name="check-disclaimer" id="check-disclaimer" [formControl]="disclaimerCheckbox">
+        <label for="check-disclaimer" class="presale--form_label pl-2">I acknowledge that I understand terms, conditions, risks and limitations outlined in the <a href="https://lightpaper.alphahuntsman.com/">lightpaper</a></label>
+      </div>
     </div>
     <div class="d-flex justify-content-center pt-5">
       <button type="button" class="btn main-btn btn-outline-light" (click)="openConnectWalletModal($event)" *ngIf="!fullAccount; else buyToken">Connect Wallet</button>
       <ng-template #buyToken>
-        <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()">Reserve token</button>
+        <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()" [disabled]="!isDisclaimerChecked">Reserve token</button>
       </ng-template>
     </div>
   </div>

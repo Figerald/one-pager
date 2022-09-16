@@ -327,8 +327,9 @@ input[type=number] {
     }
 
     &_label {
-        font-size: 12px;
+        font-size: 10px;
         color: $grey-text;
+        margin-bottom: 0;
     }
 
     &_loading {

@@ -14,7 +14,6 @@ import { Web3Service } from './services/web3.service';
 import { LoadingService } from './services/loading.service';
 import { AccountBalanceService } from './services/account-balance.service';
 import { TokenCalculationService } from './services/token-calculation.service';
-import { ReferralService } from './services/referral.service';
 
 import { OneDecimalNumberDirective } from './directives/one-decimal-number.directive';
 
@@ -41,8 +40,7 @@ export function playerFactory() {
     Web3Service,
     LoadingService,
     AccountBalanceService,
-    TokenCalculationService,
-    ReferralService
+    TokenCalculationService
   ],
   bootstrap: [AppComponent]
 })

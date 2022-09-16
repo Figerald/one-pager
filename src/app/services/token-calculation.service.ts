@@ -16,16 +16,18 @@ export class TokenCalculationService {
         return pricing.progressRaised;
     }
 
-    public async calculatePrice(bnbAmount: number): Promise<number> {
+    public async calculatePrice(): Promise<number> {
         const pricing: TokenPricingData = await this.getTokenPricingData().then(result => result.data[0]);
-        const priceToCalc: number = Math.round((pricing.priceStart + (pricing.priceEnd - pricing.priceStart) * ((pricing.amountRaised + bnbAmount) / pricing.amountEnd)) * 100) / 100;
+        const priceToCalc: number = Math
+            .round((pricing.priceStart + (pricing.priceEnd - pricing.priceStart) * ((pricing.amountRaised - pricing.amountStart) / (pricing.amountEnd - pricing.amountStart))) * 100) / 100;
 
         return priceToCalc;
     }
 
-    public async calculateProgress(bnbAmount: number): Promise<number> {
+    public async calculateProgress(alphaTokenAmount: number): Promise<number> {
         const pricing: TokenPricingData = await this.getTokenPricingData().then(result => result.data[0]);
-        const progressToCalc: number = pricing.progressRaised + (pricing.progressEnd - pricing.progressStart) * ((pricing.amountRaised + bnbAmount) / pricing.amountEnd);
+        const amountRaised: number = alphaTokenAmount + pricing.amountRaised;
+        const progressToCalc: number = pricing.progressStart + ((pricing.progressEnd - pricing.progressStart) * ((amountRaised - pricing.amountStart) / (pricing.amountEnd - pricing.amountStart)));
 
         return progressToCalc;
     }
