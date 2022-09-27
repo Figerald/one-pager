@@ -133,10 +133,11 @@
                id="bnb-amount"
                min="0"
                max="10000000"
-               step="0.1"
+               step="1"
                class="presale--form_input"
                [formControl]="bnbAmountControl"
-               placeholder="BNB Amount">
+               placeholder="BNB Amount"
+               myNumberOnly>
         <div class="presale--form_logo">
           <div class="presale--form_logo-image">
             <img src="../assets/images/Binance.svg" alt="Binance logo">
@@ -151,7 +152,7 @@
                name="alpha"
                id="alpha-amount"
                class="presale--form_input"
-               step="0.01"
+               step="1"
                placeholder="Corresponding Alpha token amount"
                [(ngModel)]="alphaTokenAmount"
                disabled>
@@ -418,9 +419,9 @@
         <h2 class="heading pb-3">Everything at one place</h2>
         <p class="about--text">No more delays and unnecessary hassle getting the latest figures - it's all in your pocket and always up-to-date! In-depth breakdowns just few clicks away</p>
       </div>
-      <div class="col-sm-5 col-10">
+      <div class="col-sm-5 col-10" [@fade-in]="videoState">
         <div class="about--video_glow"></div>
-        <img src="../assets/images/AlphaHuntsman Benedetto.webp" alt="AlphaHuntsman Benedetto analytics" class="about--video" [@fade-in]="videoState">
+        <img src="../assets/images/AlphaHuntsman Benedetto.webp" alt="AlphaHuntsman Benedetto analytics" class="about--video">
         <!-- <video class="about--video" autoplay loop [@fade-in]="videoState">
           <source src="../assets/video/Alpha Huntsman - Tracking the world one data point at the time.mp4" type="video/mp4">
         </video> -->
@@ -440,7 +441,7 @@
         <p class="about--text">Every analytics solution is molded and adapted to specific business aspects visible from data. No more build-it-once and forget as continuous monitoring, updating and improvements are done daily on our side</p>
       </div>
     </div>
-    <div class="row justify-content-center" [@slide-in-button]="mvpState">
+    <div class="row justify-content-center">
       <button type="button" class="btn main-btn btn-outline-light ml-2"><a href="https://mvp.alphahuntsman.com/" target="_blank" rel="noopener noreferrer">Try now!</a></button>
     </div>
   </div>

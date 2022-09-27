@@ -26,7 +26,8 @@ export class Web3Service {
   private provider: Web3 = new Web3(Web3.givenProvider);
   private ethereum = window.ethereum;
   private readonly toAddress = environment.toAddress;
-  // private readonly toAddress = '0x014BE62501B589604838F4Eb6Bd624AfebB30aB0';
+  // TestNet id 97, BNB mainnet id 56
+  private readonly chainId: number = 56;
 
   public constructor(private readonly loadingService: LoadingService,
                      private readonly accountBalanceService: AccountBalanceService,
@@ -136,14 +137,10 @@ export class Web3Service {
     this.provider.eth
       .getChainId()
       .then(data => {
-        if (data !== 97) {
+        if (data !== this.chainId) {
           this.setResultsStatus.next('NOT-BINANCE-NETWORK');
           return console.error('Wrong network');
         };
-        // if (data !== 56) {
-        //   this.setResultsStatus.next('NOT-BINANCE-NETWORK');
-        //   return console.error('Wrong network');
-        // };
 
         // Access the decentralized web!
         this.provider.eth
@@ -211,8 +208,7 @@ export class Web3Service {
 
   private async getChainId(): Promise<number | undefined> {
     return await this.provider?.eth.getChainId().then(data => {
-      // if (data !== 56) {
-      if (data !== 97) {
+      if (data !== this.chainId) {
         this.setResultsStatus.next('NOT-BINANCE-NETWORK');
         console.error('Wrong network');
 

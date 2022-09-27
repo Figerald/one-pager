@@ -816,6 +816,10 @@ input[type=number] {
     .presale, .wallet {
         padding: 1rem;
     }
+
+    .presale--wrapper {
+        padding-left: 8px;
+    }
 }
 
 @media (max-width: 376px) {

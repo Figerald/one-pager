@@ -15,7 +15,7 @@ import { LoadingService } from './services/loading.service';
 import { AccountBalanceService } from './services/account-balance.service';
 import { TokenCalculationService } from './services/token-calculation.service';
 
-import { OneDecimalNumberDirective } from './directives/one-decimal-number.directive';
+import { NumberOnlyDirective } from './directives/numbers-only.directive';
 
 export function playerFactory() {
   return player;
@@ -24,7 +24,7 @@ export function playerFactory() {
 @NgModule({
   declarations: [
     AppComponent,
-    OneDecimalNumberDirective
+    NumberOnlyDirective
   ],
   imports: [
     BrowserModule,
