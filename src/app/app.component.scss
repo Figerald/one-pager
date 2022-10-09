@@ -295,6 +295,11 @@ input[type=number] {
         padding: 0.375rem 0.75rem;
         color: $white;
         border: 1px solid $white;
+
+        &-invalid, &-invalid:focus, &-invalid:focus-visible {
+            border: 1px solid #df5353;
+            outline: 1px solid #df5353;
+        }
     }
 
     &_logo {
@@ -337,6 +342,12 @@ input[type=number] {
         z-index: 99999;
         right: 50px;
         bottom: -11px;
+    }
+
+    &_invalid {
+        font-size: 10px;
+        color: #df5353;
+        margin: 0.5rem 0;
     }
 }
 

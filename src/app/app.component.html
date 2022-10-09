@@ -56,7 +56,7 @@
             <div class="col-sm-9 col-12">
                 <h1 class="text-center display-4 py-3">Tracking the world one data at the time</h1>
                 <p class="text-center home--text">We live in a world of big data, but the world of actionable business insights is stuck in narrative-driven ad-hoc tailored stories. 
-                  Why is that? It was good enough, but we say no more. Let's pierce through the sea of global indicators to measure relevant and almost real-time actionable insights for enterprises</p>
+                  Why is that? It was good enough, but we say no more. Lets pierce through the sea of global indicators to measure relevant and almost real-time actionable insights for enterprises</p>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -124,20 +124,20 @@
   <div class="presale--wrapper py-5">
     <div class="presale--wrapper_text mb-4">
       <h1>Deposit</h1>
-      <p>Change BNB to Alphahuntsman token</p>
+      <p>Reserve Alphahuntsman tokens with BNB</p>
     </div>
     <div class="presale--form">
-      <div class="d-flex justify-content-center mb-3">
+      <div class="d-flex justify-content-center" [ngClass]="{ 'mb-3': isValidBNBAmount }">
         <input type="number"
                name="bnb"
                id="bnb-amount"
-               min="0"
+               min="1"
                max="10000000"
                step="1"
                class="presale--form_input"
+               [ngClass]="{ 'presale--form_input-invalid': !isValidBNBAmount }"
                [formControl]="bnbAmountControl"
-               placeholder="BNB Amount"
-               myNumberOnly>
+               placeholder="BNB Amount">
         <div class="presale--form_logo">
           <div class="presale--form_logo-image">
             <img src="../assets/images/Binance.svg" alt="Binance logo">
@@ -146,6 +146,9 @@
             BNB
           </div>
         </div>
+      </div>
+      <div *ngIf="!isValidBNBAmount">
+        <p class="presale--form_invalid">Minimum value 1 BNB</p>
       </div>
       <div class="d-flex justify-content-center mb-2">
         <input type="number"
@@ -202,7 +205,7 @@
     <div class="d-flex justify-content-center pt-5">
       <button type="button" class="btn main-btn btn-outline-light" (click)="openConnectWalletModal($event)" *ngIf="!fullAccount; else buyToken">Connect Wallet</button>
       <ng-template #buyToken>
-        <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()" [disabled]="!isDisclaimerChecked">Reserve token</button>
+        <button type="button" class="btn main-btn btn-outline-light" (click)="sendToken()" [disabled]="!isDisclaimerChecked || !isValidBNBAmount">Reserve token</button>
       </ng-template>
     </div>
   </div>

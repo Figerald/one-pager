@@ -67,6 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public showWaitlist = false;
   public isLoading = false;
   public isCheckingAddress = false;
+  public isValidBNBAmount = true;
   public alphaTokenAmount: number | undefined;
   public bonusAlphaToken: number | undefined;
   public walletInformation: WalletInformation[] | undefined;
@@ -152,7 +153,13 @@ export class AppComponent implements OnInit, OnDestroy {
         distinctUntilChanged(),
         takeUntil(this.destroy$))
       .subscribe(async () => {
-        await this.convertBnbToAlpha();
+        this.isValidBNBAmount = true;
+        if (this.bnbAmountControl.status !== 'VALID') {
+          this.isValidBNBAmount = false;
+          this.alphaTokenAmount = undefined;
+        } else {
+          await this.convertBnbToAlpha();
+        }
       });
 
     this.referralAddressControl.valueChanges
