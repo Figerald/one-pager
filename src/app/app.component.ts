@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import * as feather from 'feather-icons';
 import * as Highcharts from 'highcharts';
@@ -34,6 +34,7 @@ darkUnica(Highcharts);
   animations: animationsArray
 })
 export class AppComponent implements OnInit, OnDestroy {
+  @ViewChild('notification') public notificationHeader!: ElementRef<HTMLDivElement>;
   @ViewChildren('element1, element2, element3, element4, element5, element6, element7, element8, chartImage') private elements!: QueryList<any>;
   public isWalletModalOpen = false;
   public detectedElements: any[] = [];
@@ -82,6 +83,16 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject();
 
   @HostListener('window:scroll', ['$event']) public onScroll(): void {
+    if (document.documentElement.scrollTop > 100) {
+      this.notificationHeader.nativeElement.style.height = '0';
+      this.notificationHeader.nativeElement.querySelector('.header-notification--button')?.setAttribute('style', 'opacity: 0');
+      document.getElementById('header-mobile')!.style.top = '0';
+    }
+    if (document.documentElement.scrollTop < 100) {
+      this.notificationHeader.nativeElement.style.height = '45px';
+      this.notificationHeader.nativeElement.querySelector('.header-notification--button')?.setAttribute('style', 'opacity: 1');
+      document.getElementById('header-mobile')!.style.top = '45px';
+    }
     this.detectElement();
   }
 
@@ -189,7 +200,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public toggleMeniu(): void {
     this.expanded = !this.expanded;
-    // document.getElementById('header-mobile')!.style.height = this.expanded ? '230px' : '72px';
+    // document.getElementById('header-wrapper')!.style.height = this.expanded ? '485px' : '0';
   }
 
   public scroll(el: HTMLElement): void {

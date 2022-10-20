@@ -30,10 +30,51 @@ $white: #F7F7F9;
     color: $white;
 }
 
+#header-wrapper {
+    height: 0;
+    transition: height 0.8s;
+}
+
+.header-wrapper {
+    position: relative;
+}
+
+.header-notification {
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    height: 45px;
+    overflow: hidden;
+    background-color: rgb(201 100 26);
+    width: 100vw;
+    z-index: 9999;
+    transition: height 0.5s;
+
+    &--text {
+        padding-right: 1rem;
+        font-size: 14px;
+    }
+
+    &--button {
+        font-family: "Rubik", sans-serif;
+        border-radius: 30px;
+        font-size: 14px;
+        padding: 2px 20px;
+        color: $black;
+        background-color: $white;
+        opacity: 1;
+        transition: opacity 0.5s;
+    }
+}
+
 .header-mobile {
     position: fixed;
+    top: 45px;
     width: 100%;
     z-index: 99;
+    transition: top 0.5s;
 }
 
 .logo-image {
@@ -739,6 +780,7 @@ input[type=number] {
     .header-mobile {
         overflow: hidden;
         position: relative;
+        background-color: black;
     }
 
     .navigation--logo {
@@ -779,7 +821,7 @@ input[type=number] {
     }
 }
 
-@media (max-width: 565px) {
+@media (max-width: 576px) {
     .waitlist--input {
         min-width: fit-content;
     }
@@ -815,6 +857,11 @@ input[type=number] {
     .wallet--table {
         width: 100%;
     }
+
+    .row {
+        margin-right: 0;
+        margin-left: 0;
+    }
 }
 
 @media (min-width: 565px) {
@@ -831,6 +878,14 @@ input[type=number] {
     .presale--wrapper {
         padding-left: 8px;
     }
+
+    .header-notification--text {
+        padding-right: 0.5rem;
+    }
+
+    .header-notification--button {
+        font-size: 12px;
+    }
 }
 
 @media (max-width: 376px) {
@@ -845,11 +900,28 @@ input[type=number] {
     .presale--wrapper_text, .wallet--wrapper_text {
         font-size: 12px;
     }
+
+    .header-notification--button {
+        padding: 2px 15px;
+    }
+
+    .header-notification--text {
+        font-size: 12px;
+    }
 }
 
 @media (max-width: 320px) {
     .about--video_glow {
         top: 26%;
+    }
+
+    .header-notification--button {
+        padding: 2px 5px;
+    }
+
+    .header-notification--text {
+        font-size: 11px;
+        padding-right: 5px;
     }
 }
 
