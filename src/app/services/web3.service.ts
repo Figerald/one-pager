@@ -70,10 +70,10 @@ export class Web3Service {
       const price = await this.tokenCalculationService.calculatePrice();
       // Calc alpha token amount
       let alphaToken: number = Math.round(value * price * 100) / 100;
-      const progressRaised: number = await this.tokenCalculationService.calculateProgress(alphaToken);
-      
+      // const progressRaised: number = await this.tokenCalculationService.calculateProgress(alphaToken);
+
       // Update Alpha token price and save data to DB
-      await Promise.all([this.tokenCalculationService.updateTokenPrice(progressRaised, alphaToken), this.accountBalanceService.saveAccountTokenData(result.from, alphaToken, price, value)])
+      await Promise.all([this.tokenCalculationService.updateTokenPrice(alphaToken), this.accountBalanceService.saveAccountTokenData(result.from, alphaToken, price, value)])
       // Updating account tokens transactions data
       await this.accountBalanceService.updateAccountData(result.from);
     }).catch(error => {
@@ -104,11 +104,11 @@ export class Web3Service {
       // Calc alpha token amount
       const alphaToken: number = Math.round(value * price * 100) / 100;
       const alphaTokenBonus = Math.round(alphaToken * 0.1 * 100) / 100;
-      const progressRaised: number = await this.tokenCalculationService.calculateProgress(alphaToken);
+      // const progressRaised: number = await this.tokenCalculationService.calculateProgress(alphaToken);
 
       // Update Alpha token price and save data to DB
       await Promise.all([
-        this.tokenCalculationService.updateTokenPrice(progressRaised, alphaToken),
+        this.tokenCalculationService.updateTokenPrice(alphaToken),
         this.accountBalanceService.saveAccountTokenData(result.from, alphaToken, price, value),
         this.accountBalanceService.saveAccountTokenData(result.from, alphaTokenBonus, price, 0),
       ]);

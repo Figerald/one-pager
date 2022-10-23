@@ -32,8 +32,12 @@ export class TokenCalculationService {
         return progressToCalc;
     }
 
-    public async updateTokenPrice(progressRaised: number, amountRaised: number): Promise<void> {
-        await lastValueFrom(this.http.put<ApiResponse<TokenPricingData>>('https://api.alphahuntsman.com/token/pricing', { progressRaised, amountRaised }));
+    // public async updateTokenPrice(progressRaised: number, amountRaised: number): Promise<void> {
+    //     await lastValueFrom(this.http.put<ApiResponse<TokenPricingData>>('https://api.alphahuntsman.com/token/pricing', { progressRaised, amountRaised }));
+    // }
+
+    public async updateTokenPrice(amountRaised: number): Promise<void> {
+        await lastValueFrom(this.http.put<ApiResponse<TokenPricingData>>('https://api.alphahuntsman.com/token/pricing', { amountRaised }));
     }
 
     private async getTokenPricingData(): Promise<ApiResponse<TokenPricingData>> {
